@@ -8,6 +8,12 @@ namespace ReviewEverything.Model
 {
     public class ReviewItem
     {
+        public class Specification
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+        }
+
         private readonly Uri reference;
 
         public ReviewItem(Uri reference)
@@ -26,7 +32,7 @@ namespace ReviewEverything.Model
         public string Name { get; set; }
 
         public string Description { get; set; }
-        public Dictionary<string, string> Properties { get; set; }
+        public Specification[] Specifications { get; set; }
 
         public string MainImageUrl { get; set; }
         public string[] ImagesUrls { get; set; }

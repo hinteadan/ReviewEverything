@@ -54,6 +54,8 @@ namespace ReviewEverything.DataProvider.CelRo
             var currency = pricingInfoNode.Descendants("div").WithClass("pret_info").Single()
                 .Descendants("meta").WithAttribute("itemprop", "priceCurrency").Single().Attributes["content"].Value.Trim();
 
+            var specsTableNode = prodInfoNode.Element("table");
+
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
                 {
                     Name = name,
@@ -62,8 +64,36 @@ namespace ReviewEverything.DataProvider.CelRo
                     ImagesUrls = otherImages,
                     Price = price,
                     OldPrice = this.OldPrice,
-                    Currency = currency
+                    Currency = currency,
+                    Specifications = ParseSpecs(specsTableNode)
                 };
+        }
+
+        private ReviewItem.Specification[] ParseSpecs(HtmlNode specsTableNode)
+        {
+            if (specsTableNode == null)
+            {
+                return new ReviewItem.Specification[0];
+            }
+
+            return specsTableNode
+                .Descendants("tr")
+                .Select(row => new ReviewItem.Specification
+                {
+                    Name = CleanSpecName(row.Elements("td").WithClass("c3").Single().InnerText),
+                    Value = row.Elements("td").WithClass("c4").Single().InnerText
+                })
+                .ToArray();
+        }
+
+        private string CleanSpecName(string name)
+        {
+            var trimmed = name.Trim();
+            if (trimmed[trimmed.Length - 1] == ':')
+            {
+                return trimmed.Substring(0, trimmed.Length - 1);
+            }
+            return trimmed;
         }
     }
 }
