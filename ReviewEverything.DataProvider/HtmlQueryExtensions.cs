@@ -18,6 +18,17 @@ namespace ReviewEverything.DataProvider
                 );
         }
 
+        public static bool HasAttribute(this HtmlNode node, string attrName, string attrValue = null)
+        {
+            return node.HasAttributes && node.Attributes[attrName] != null
+                && (string.IsNullOrWhiteSpace(attrValue) ? true : string.Equals(node.Attributes[attrName].Value, attrValue, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public static IEnumerable<HtmlNode> WithAttribute(this IEnumerable<HtmlNode> nodes, string attrName, string attrValue = null)
+        {
+            return nodes.Where(n => n.HasAttribute(attrName, attrValue));
+        }
+
         private static bool HasClass(string classAttributValue, string classToCheck)
         {
             return classAttributValue
