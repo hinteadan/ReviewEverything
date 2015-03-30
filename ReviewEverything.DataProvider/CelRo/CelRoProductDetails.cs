@@ -87,7 +87,8 @@ namespace ReviewEverything.DataProvider.CelRo
                 byte? rating = null;
                 if(ratingString != null)
                 {
-                    rating = byte.Parse(ratingString.Replace(" din 5 Stele", string.Empty).Trim());
+                    decimal celRating = decimal.Parse(ratingString.Replace(" din 5 Stele", string.Empty).Trim());
+                    rating = (byte)(celRating / 5 * 100);
                 }
 
                 yield return new ReviewItem.Impression
