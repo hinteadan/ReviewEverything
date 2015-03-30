@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ReviewEverything.DataProvider\ReviewEverything.DataProvider.csproj">
+      <Project>{ec5038c2-040c-400b-84dc-6e9c99db5fc0}</Project>
+      <Name>ReviewEverything.DataProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ReviewEverything.Model\ReviewEverything.Model.csproj">
       <Project>{ef41bc2f-b6c4-4e91-abd0-f77813c9bc20}</Project>
       <Name>ReviewEverything.Model</Name>

@@ -4,13 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EF41BC2F-B6C4-4E91-ABD0-F77813C9BC20}</ProjectGuid>
+    <ProjectGuid>{EC5038C2-040C-400B-84DC-6E9C99DB5FC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ReviewEverything.Model</RootNamespace>
-    <AssemblyName>ReviewEverything.Model</AssemblyName>
+    <RootNamespace>ReviewEverything.DataProvider</RootNamespace>
+    <AssemblyName>ReviewEverything.DataProvider</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Recognos.Core">
+      <HintPath>..\packages\Recognos.Core.2.0.6\lib\net451\Recognos.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,13 +47,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICanBeParsed.cs" />
-    <Compile Include="ICanBeSearched.cs" />
+    <Compile Include="CelRo\CelRoProductDetails.cs" />
+    <Compile Include="CelRo\CelRoSearch.cs" />
+    <Compile Include="HtmlQueryExtensions.cs" />
+    <Compile Include="HttpOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReviewItem.cs" />
-    <Compile Include="SearchCriteria.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReviewEverything.Model\ReviewEverything.Model.csproj">
+      <Project>{ef41bc2f-b6c4-4e91-abd0-f77813c9bc20}</Project>
+      <Name>ReviewEverything.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
