@@ -13,7 +13,7 @@ namespace Playground
     {
         static void Main(string[] args)
         {
-            var result = new CelRoSearch().SearchFor(new SearchCriteria("Nokia Lumia 930"));
+            var result = new CelRoSearch().SearchFor(new SearchCriteria("sony-xperia-z3-d6653"));
 
             var item = result.First().Parse();
         }

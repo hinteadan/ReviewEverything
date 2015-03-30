@@ -7,6 +7,7 @@ using Recognos.Core;
 using ReviewEverything.Model;
 using HtmlAgilityPack;
 using ReviewEverything.DataProvider;
+using System.Globalization;
 
 namespace ReviewEverything.DataProvider.CelRo
 {
@@ -65,8 +66,40 @@ namespace ReviewEverything.DataProvider.CelRo
                     Price = price,
                     OldPrice = this.OldPrice,
                     Currency = currency,
-                    Specifications = ParseSpecs(specsTableNode)
+                    Specifications = ParseSpecs(specsTableNode),
+                    Impressions = ParseImpressions(prodInfoNode).ToArray()
                 };
+        }
+
+        private IEnumerable<ReviewItem.Impression> ParseImpressions(HtmlNode prodInfoNode)
+        {
+            string dateTimeFormat = "'a scris pe' d MMM yyyy 'la' HH:mm";
+            var nameNodes = prodInfoNode.Elements("div").WithClass("review_nume").ToArray();
+            var commentNodes = prodInfoNode.Elements("div").WithClass("review_coment").ToArray();
+
+            for(var i = 0; i < nameNodes.Length; i++)
+            {
+                var name = nameNodes[i].Descendants("b").First().InnerText;
+                var comment = commentNodes[i].InnerText;
+                var timestamp = DateTime.ParseExact(nameNodes[i].Descendants("span").First().InnerText, dateTimeFormat, CultureInfo.InvariantCulture);
+                var ratingImg = nameNodes[i].Descendants("img").FirstOrDefault();
+                var ratingString = ratingImg != null ? nameNodes[i].Descendants("img").First().GetAttributeValue("title", null) : null;
+
+                byte? rating = null;
+                if(ratingString != null)
+                {
+                    rating = byte.Parse(ratingString.Replace(" din 5 Stele", string.Empty).Trim());
+                }
+
+                yield return new ReviewItem.Impression
+                {
+                    By = name,
+                    Comment = comment,
+                    On = timestamp,
+                    Rating = rating
+                };
+            }
+
         }
 
         private ReviewItem.Specification[] ParseSpecs(HtmlNode specsTableNode)
@@ -80,8 +113,8 @@ namespace ReviewEverything.DataProvider.CelRo
                 .Descendants("tr")
                 .Select(row => new ReviewItem.Specification
                 {
-                    Name = CleanSpecName(row.Elements("td").WithClass("c3").Single().InnerText),
-                    Value = row.Elements("td").WithClass("c4").Single().InnerText
+                    Name = CleanSpecName(row.Descendants("td").WithClass("c3").Single().InnerText),
+                    Value = row.Descendants("td").WithClass("c4").Single().InnerText
                 })
                 .ToArray();
         }

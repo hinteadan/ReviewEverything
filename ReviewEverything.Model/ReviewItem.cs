@@ -14,6 +14,14 @@ namespace ReviewEverything.Model
             public string Value { get; set; }
         }
 
+        public class Impression
+        {
+            public string By { get; set; }
+            public DateTime? On { get; set; }
+            public string Comment { get; set; }
+            public byte? Rating { get; set; }
+        }
+
         private readonly Uri reference;
 
         public ReviewItem(Uri reference)
@@ -39,6 +47,7 @@ namespace ReviewEverything.Model
         public decimal Price { get; set; }
         public decimal? OldPrice { get; set; }
         public string Currency { get; set; }
+        public Impression[] Impressions { get; set; }
 
     }
 }
