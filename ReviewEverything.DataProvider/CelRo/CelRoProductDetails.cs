@@ -39,7 +39,7 @@ namespace ReviewEverything.DataProvider.CelRo
             var prodInfoNode = htmlDoc.DocumentNode.Descendants("div").WithClass("prod_info").Single();
 
             var name = prodInfoNode.Descendants("h2").WithAttribute("itemprop", "name").Single().InnerText;
-            var descriptionHtml = prodInfoNode.Descendants("div").WithClass("descriere").Single().InnerHtml;
+            var descriptionNode = prodInfoNode.Descendants("div").WithClass("descriere").Single();
 
             var imagesTable = htmlDoc.GetElementbyId("pzx");
             var mainImageUrl = imagesTable.Descendants("td").First().Descendants("img").WithAttribute("itemprop", "image").Single().Attributes["src"].Value;
@@ -60,7 +60,7 @@ namespace ReviewEverything.DataProvider.CelRo
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
                 {
                     Name = name,
-                    Description = descriptionHtml,
+                    Description = new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText },
                     MainImageUrl = mainImageUrl,
                     ImagesUrls = otherImages,
                     Price = price,
@@ -80,7 +80,6 @@ namespace ReviewEverything.DataProvider.CelRo
             for(var i = 0; i < nameNodes.Length; i++)
             {
                 var name = nameNodes[i].Descendants("b").First().InnerText;
-                var comment = commentNodes[i].InnerText;
                 var timestamp = DateTime.ParseExact(nameNodes[i].Descendants("span").First().InnerText, dateTimeFormat, CultureInfo.InvariantCulture);
                 var ratingImg = nameNodes[i].Descendants("img").FirstOrDefault();
                 var ratingString = ratingImg != null ? nameNodes[i].Descendants("img").First().GetAttributeValue("title", null) : null;
@@ -94,7 +93,7 @@ namespace ReviewEverything.DataProvider.CelRo
                 yield return new ReviewItem.Impression
                 {
                     By = name,
-                    Comment = comment,
+                    Comment = new ReviewItem.RichContent { Text = commentNodes[i].InnerText, Html = commentNodes[i].InnerHtml },
                     On = timestamp,
                     Rating = rating
                 };

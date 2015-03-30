@@ -8,6 +8,12 @@ namespace ReviewEverything.Model
 {
     public class ReviewItem
     {
+        public class RichContent
+        {
+            public string Text { get; set; }
+            public string Html { get; set; }
+        }
+
         public class Specification
         {
             public string Name { get; set; }
@@ -18,7 +24,7 @@ namespace ReviewEverything.Model
         {
             public string By { get; set; }
             public DateTime? On { get; set; }
-            public string Comment { get; set; }
+            public RichContent Comment { get; set; }
             public byte? Rating { get; set; }
         }
 
@@ -39,7 +45,7 @@ namespace ReviewEverything.Model
 
         public string Name { get; set; }
 
-        public string Description { get; set; }
+        public RichContent Description { get; set; }
         public Specification[] Specifications { get; set; }
 
         public string MainImageUrl { get; set; }
