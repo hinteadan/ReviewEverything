@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ICanBeParsed.cs" />
     <Compile Include="ICanBeSearched.cs" />
+    <Compile Include="ICanStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReviewItem.cs" />
     <Compile Include="SearchCriteria.cs" />
