@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ReviewEverything.DataProvider.CelRo;
 using ReviewEverything.Model;
+using ReviewEverything.DataProvider.LocalStore;
 
 namespace Playground
 {
@@ -13,10 +14,12 @@ namespace Playground
     {
         static void Main(string[] args)
         {
-            var result = new CelRoSearch().SearchFor(new SearchCriteria("sony-xperia-z3-d6653"));
+            //var result = new CelRoSearch().SearchFor(new SearchCriteria("sony-xperia-z3-d6653"));
             //var result = new CelRoSearch().SearchFor(new SearchCriteria("lumia 930"));
 
-            var item = result.First().Parse();
+            //var item = result.First().Parse();
+
+            var store = new LocalStore();
         }
     }
 }
