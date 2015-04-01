@@ -33,6 +33,7 @@ namespace ReviewEverything.Model
         public ReviewItem(Uri reference)
         {
             this.reference = reference;
+            this.CreatedOn = DateTime.Now;
         }
 
         public Uri Reference
@@ -42,6 +43,7 @@ namespace ReviewEverything.Model
                 return this.reference;
             }
         }
+        public DateTime CreatedOn { get; set; }
 
         public string Name { get; set; }
 
