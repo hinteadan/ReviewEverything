@@ -11,28 +11,12 @@ using System.Globalization;
 
 namespace ReviewEverything.DataProvider.CelRo
 {
-    public class CelRoProductDetails : ICanBeParsed
+    public class CelRoProductDetails : WebsiteProductDetails
     {
-        private readonly string productDetailsUrl;
+        public CelRoProductDetails(string url) : base(url) { }
 
-        public CelRoProductDetails(string url)
+        protected override ReviewItem Parse(string content)
         {
-            Check.Condition(Uri.IsWellFormedUriString(url, UriKind.Absolute), "The given product details URL is invalid!");
-
-            this.productDetailsUrl = url;
-        }
-
-        public string Name { get; set; }
-        public string ThumbnailUrl { get; set; }
-        public decimal Price { get; set; }
-        public decimal? OldPrice { get; set; }
-        public string Currency { get; set; }
-
-
-        public ReviewItem Parse()
-        {
-            string content = HttpOperations.Get(this.productDetailsUrl);
-
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(content);
 
@@ -58,17 +42,17 @@ namespace ReviewEverything.DataProvider.CelRo
             var specsTableNode = prodInfoNode.Element("table");
 
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
-                {
-                    Name = name,
-                    Description = new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText },
-                    MainImageUrl = mainImageUrl,
-                    ImagesUrls = otherImages,
-                    Price = price,
-                    OldPrice = this.OldPrice,
-                    Currency = currency,
-                    Specifications = ParseSpecs(specsTableNode),
-                    Impressions = ParseImpressions(prodInfoNode).ToArray()
-                };
+            {
+                Name = name,
+                Description = new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText },
+                MainImageUrl = mainImageUrl,
+                ImagesUrls = otherImages,
+                Price = price,
+                OldPrice = this.OldPrice,
+                Currency = currency,
+                Specifications = ParseSpecs(specsTableNode),
+                Impressions = ParseImpressions(prodInfoNode).ToArray()
+            };
         }
 
         private IEnumerable<ReviewItem.Impression> ParseImpressions(HtmlNode prodInfoNode)
@@ -77,7 +61,7 @@ namespace ReviewEverything.DataProvider.CelRo
             var nameNodes = prodInfoNode.Elements("div").WithClass("review_nume").ToArray();
             var commentNodes = prodInfoNode.Elements("div").WithClass("review_coment").ToArray();
 
-            for(var i = 0; i < nameNodes.Length; i++)
+            for (var i = 0; i < nameNodes.Length; i++)
             {
                 var name = nameNodes[i].Descendants("b").First().InnerText;
                 var timestamp = DateTime.ParseExact(nameNodes[i].Descendants("span").First().InnerText, dateTimeFormat, CultureInfo.InvariantCulture);
@@ -85,7 +69,7 @@ namespace ReviewEverything.DataProvider.CelRo
                 var ratingString = ratingImg != null ? nameNodes[i].Descendants("img").First().GetAttributeValue("title", null) : null;
 
                 byte? rating = null;
-                if(ratingString != null)
+                if (ratingString != null)
                 {
                     decimal celRating = decimal.Parse(ratingString.Replace(" din 5 Stele", string.Empty).Trim());
                     rating = (byte)(celRating / 5 * 100);

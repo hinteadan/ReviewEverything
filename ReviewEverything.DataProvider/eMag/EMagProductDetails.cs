@@ -8,25 +8,11 @@ using ReviewEverything.Model;
 
 namespace ReviewEverything.DataProvider.eMag
 {
-    public class EMagProductDetails : ICanBeParsed
+    public class EMagProductDetails : WebsiteProductDetails
     {
-        private readonly string productDetailsUrl;
+        public EMagProductDetails(string url) : base(url) { }
 
-        public EMagProductDetails(string url)
-        {
-            Check.Condition(Uri.IsWellFormedUriString(url, UriKind.Absolute), "The given product details URL is invalid!");
-
-            this.productDetailsUrl = url;
-        }
-
-        public string Name { get; set; }
-        public string ThumbnailUrl { get; set; }
-        public decimal Price { get; set; }
-        public decimal? OldPrice { get; set; }
-        public string Currency { get; set; }
-        public byte? Rating { get; set; }
-
-        public ReviewItem Parse()
+        protected override ReviewItem Parse(string content)
         {
             throw new NotImplementedException();
         }
