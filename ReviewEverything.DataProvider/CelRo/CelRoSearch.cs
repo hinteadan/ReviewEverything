@@ -11,18 +11,17 @@ using ReviewEverything.DataProvider;
 
 namespace ReviewEverything.DataProvider.CelRo
 {
-    public class CelRoSearch : ICanBeSearched
+    public class CelRoSearch : WebsiteSearch
     {
-        private readonly string urlPattern = "http://www.cel.ro/cauta/{0}/1/1";
-
-        public IEnumerable<ICanBeParsed> SearchFor(SearchCriteria criteria)
+        protected override string UrlPattern
         {
-            string content = HttpOperations.Get(string.Format(urlPattern, criteria.UriFriendly()));
-
-            return ParseSearchResult(content);
+            get
+            {
+                return "http://www.cel.ro/cauta/{0}/1/1";
+            }
         }
 
-        private IEnumerable<ICanBeParsed> ParseSearchResult(string content)
+        protected override IEnumerable<ICanBeParsed> ParseSearchResult(string content)
         {
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(content);
