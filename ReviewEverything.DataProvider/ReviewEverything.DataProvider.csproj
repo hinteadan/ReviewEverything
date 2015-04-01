@@ -57,6 +57,8 @@
     <Compile Include="HtmlQueryExtensions.cs" />
     <Compile Include="HttpOperations.cs" />
     <Compile Include="LocalStore\LocalStore.cs" />
+    <Compile Include="LocalStore\StoreDocument.cs" />
+    <Compile Include="LocalStore\StoreIndexEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

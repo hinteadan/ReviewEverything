@@ -14,12 +14,15 @@ namespace Playground
     {
         static void Main(string[] args)
         {
-            //var result = new CelRoSearch().SearchFor(new SearchCriteria("sony-xperia-z3-d6653"));
+            var criteria = new SearchCriteria("sony-xperia-z3-d6653");
+            var result = new CelRoSearch().SearchFor(criteria);
             //var result = new CelRoSearch().SearchFor(new SearchCriteria("lumia 930"));
 
-            //var item = result.First().Parse();
+            var item = result.First().Parse();
 
             var store = new LocalStore();
+
+            store.Persist(criteria, new ReviewItem[]{ item } );
         }
     }
 }
