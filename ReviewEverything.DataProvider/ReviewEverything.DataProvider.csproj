@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="CelRo\CelRoProductDetails.cs" />
     <Compile Include="CelRo\CelRoSearch.cs" />
+    <Compile Include="eMag\EMagProductDetails.cs" />
+    <Compile Include="eMag\EMagSearch.cs" />
     <Compile Include="HtmlQueryExtensions.cs" />
     <Compile Include="HttpOperations.cs" />
     <Compile Include="LocalStore\LocalStore.cs" />
