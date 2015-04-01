@@ -12,6 +12,7 @@ namespace ReviewEverything.DataProvider.LocalStore
 {
     public class LocalStore : ICanStore
     {
+        private const string stringPairJoint = ":=:";
         private readonly string storeBasePath;
         private const string indexFileName = "index.json";
         private const string documentsFolderName = "Docs";
@@ -113,16 +114,8 @@ namespace ReviewEverything.DataProvider.LocalStore
                 isIndexUpdatedBySelf = false;
                 return;
             }
-            documentsIndexDictionary = JsonConvert.DeserializeObject<Dictionary<Guid, StoreIndexEntry>>(File.ReadAllText(indexFilePath));
-        }
-
-        private Dictionary<string, string> IndexFieldsFor(SearchCriteria criteria, IEnumerable<StoreDocument<ReviewItem>> storedReviewItems)
-        {
-            return new Dictionary<string, string> 
-            { 
-                { "Value", criteria.RawValue },
-                { "ReviewItems", string.Join(",", storedReviewItems.Select(i => i.Id.ToString()).ToArray()) }
-            };
+            documentsIndexDictionary = JsonConvert.DeserializeObject<Dictionary<Guid, StoreIndexEntry>>(File.ReadAllText(indexFilePath))
+                ?? new Dictionary<Guid, StoreIndexEntry>();
         }
 
         private IEnumerable<StoreDocument<ReviewItem>> PersistItems(IEnumerable<ReviewItem> items)
@@ -157,6 +150,18 @@ namespace ReviewEverything.DataProvider.LocalStore
             isIndexUpdatedBySelf = true;
             File.WriteAllText(indexFilePath, JsonConvert.SerializeObject(documentsIndexDictionary, Formatting.Indented));
             return indexEntry;
+        }
+
+        private Dictionary<string, string> IndexFieldsFor(SearchCriteria criteria, IEnumerable<StoreDocument<ReviewItem>> storedReviewItems)
+        {
+            return new Dictionary<string, string> 
+            { 
+                { "Value", criteria.RawValue },
+                { "ReviewItems", string.Join(" ", storedReviewItems.Select(i => 
+                        string.Format("{0}{1}{2}", i.Id, stringPairJoint, i.Payload.Reference)
+                    ).ToArray()) 
+                }
+            };
         }
     }
 }
