@@ -15,14 +15,15 @@ namespace Playground
         static void Main(string[] args)
         {
             var criteria = new SearchCriteria("sony-xperia-z3-d6653");
-            var result = new CelRoSearch().SearchFor(criteria);
+            //var result = new CelRoSearch().SearchFor(criteria);
             //var result = new CelRoSearch().SearchFor(new SearchCriteria("lumia 930"));
 
-            var item = result.First().Parse();
+            //var item = result.First().Parse();
 
             var store = new LocalStore();
+            var item = store.Retrieve(new Uri("http://www.cel.ro/telefoane-mobile/telefon-mobil-sony-xperia-z3-d6653-4g-white-l/"));
 
-            store.Persist(criteria, new ReviewItem[]{ item } );
+            //store.Persist(criteria, new ReviewItem[]{ item } );
         }
     }
 }

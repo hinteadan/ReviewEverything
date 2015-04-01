@@ -58,7 +58,32 @@ namespace ReviewEverything.DataProvider.LocalStore
             {
                 UpdateDocumentIndex();
             }
-            return null;
+
+            Guid? docId = FindReviewItemIdByReference(reference);
+
+            StoreDocument<ReviewItem> doc = JsonConvert.DeserializeObject<StoreDocument<ReviewItem>>(
+                File.ReadAllText(string.Format(@"{0}\{1}", documentsPath, docId))
+                );
+
+            return doc.Payload;
+        }
+
+        private Guid? FindReviewItemIdByReference(Uri reference)
+        {
+            string type = typeof(SearchCriteria).AssemblyQualifiedName;
+
+            var entry = documentsIndexDictionary.Values
+                .Where(x => x.Type == type)
+                .FirstOrDefault(x => x.Fields["ReviewItems"].Contains(reference.ToString()));
+
+            if (entry == null)
+            {
+                return null;
+            }
+
+            var item = entry.Fields["ReviewItems"].Split(' ').First(e => e.EndsWith(reference.ToString()));
+
+            return new Guid(item.Split(new string[] { stringPairJoint }, StringSplitOptions.None)[0]);
         }
 
         public IEnumerable<ICanBeParsed> SearchFor(SearchCriteria criteria)
