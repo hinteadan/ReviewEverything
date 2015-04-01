@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ReviewEverything.DataProvider.CelRo;
+using ReviewEverything.DataProvider.eMag;
 using ReviewEverything.Model;
 using ReviewEverything.DataProvider.LocalStore;
 
@@ -14,14 +15,13 @@ namespace Playground
     {
         static void Main(string[] args)
         {
-            var criteria = new SearchCriteria("sony-xperia-z3-d6653");
-            //var result = new CelRoSearch().SearchFor(criteria);
-            //var result = new CelRoSearch().SearchFor(new SearchCriteria("lumia 930"));
+            var criteria = new SearchCriteria("nokia lumia 930");
+            var result = new EMagSearch().SearchFor(criteria);
 
             //var item = result.First().Parse();
 
-            var store = new LocalStore();
-            var item = store.SearchFor(criteria);
+            //var store = new LocalStore();
+            //var item = store.SearchFor(criteria);
 
             //store.Persist(criteria, new ReviewItem[]{ item } );
         }
