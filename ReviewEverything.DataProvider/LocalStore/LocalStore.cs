@@ -81,9 +81,9 @@ namespace ReviewEverything.DataProvider.LocalStore
                 return null;
             }
 
-            var item = entry.Fields["ReviewItems"].Split(' ').First(e => e.EndsWith(reference.ToString()));
-
-            return new Guid(item.Split(new string[] { stringPairJoint }, StringSplitOptions.None)[0]);
+            return ParseIndexedReviewItems(entry.Fields["ReviewItems"])
+                .First(i => i.Value == reference)
+                .Key;
         }
 
         public IEnumerable<ICanBeParsed> SearchFor(SearchCriteria criteria)
@@ -92,7 +92,14 @@ namespace ReviewEverything.DataProvider.LocalStore
             {
                 UpdateDocumentIndex();
             }
-            return null;
+
+            string type = typeof(SearchCriteria).AssemblyQualifiedName;
+
+            return documentsIndexDictionary.Values
+                .Where(x => x.Type == type)
+                .Where(x => x.Fields["Value"] == criteria.RawValue)
+                .SelectMany(x => ParseIndexedReviewItems(x.Fields["ReviewItems"]))
+                .Select(i => new ReviewItemLoader(documentsPath, i.Key));
         }
 
         private void EnsureFilePath(string path)
@@ -187,6 +194,18 @@ namespace ReviewEverything.DataProvider.LocalStore
                     ).ToArray()) 
                 }
             };
+        }
+
+        private KeyValuePair<Guid, Uri>[] ParseIndexedReviewItems(string reviewItems)
+        {
+            return reviewItems
+                .Split(' ')
+                .Select(p =>
+                {
+                    var pair = p.Split(new string[] { stringPairJoint }, StringSplitOptions.None);
+                    return new KeyValuePair<Guid, Uri>(new Guid(pair[0]), new Uri(pair[1]));
+                })
+                .ToArray();
         }
     }
 }

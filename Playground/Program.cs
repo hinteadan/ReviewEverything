@@ -21,7 +21,7 @@ namespace Playground
             //var item = result.First().Parse();
 
             var store = new LocalStore();
-            var item = store.Retrieve(new Uri("http://www.cel.ro/telefoane-mobile/telefon-mobil-sony-xperia-z3-d6653-4g-white-l/"));
+            var item = store.SearchFor(criteria);
 
             //store.Persist(criteria, new ReviewItem[]{ item } );
         }
