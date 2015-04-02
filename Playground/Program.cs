@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ReviewEverything.DataProvider.CelRo;
 using ReviewEverything.DataProvider.eMag;
 using ReviewEverything.Model;
-using ReviewEverything.DataProvider.LocalStore;
+using ReviewEverything.DataProvider.Storage;
 
 namespace Playground
 {

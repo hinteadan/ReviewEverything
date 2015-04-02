@@ -54,14 +54,15 @@
   <ItemGroup>
     <Compile Include="CelRo\CelRoProductDetails.cs" />
     <Compile Include="CelRo\CelRoSearch.cs" />
+    <Compile Include="Crawler.cs" />
     <Compile Include="eMag\EMagProductDetails.cs" />
     <Compile Include="eMag\EMagSearch.cs" />
     <Compile Include="HtmlQueryExtensions.cs" />
     <Compile Include="HttpOperations.cs" />
-    <Compile Include="LocalStore\LocalStore.cs" />
-    <Compile Include="LocalStore\ReviewItemLoader.cs" />
-    <Compile Include="LocalStore\StoreDocument.cs" />
-    <Compile Include="LocalStore\StoreIndexEntry.cs" />
+    <Compile Include="Storage\LocalStore.cs" />
+    <Compile Include="Storage\ReviewItemLoader.cs" />
+    <Compile Include="Storage\StoreDocument.cs" />
+    <Compile Include="Storage\StoreIndexEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebsiteProductDetails.cs" />
     <Compile Include="WebsiteSearch.cs" />

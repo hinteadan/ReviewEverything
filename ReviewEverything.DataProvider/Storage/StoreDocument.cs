@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReviewEverything.DataProvider.LocalStore
+namespace ReviewEverything.DataProvider.Storage
 {
     public class StoreDocument<TPayload>
     {

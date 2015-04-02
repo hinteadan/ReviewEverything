@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ReviewEverything.Model;
 using Newtonsoft.Json;
 
-namespace ReviewEverything.DataProvider.LocalStore
+namespace ReviewEverything.DataProvider.Storage
 {
     public class LocalStore : ICanStore
     {

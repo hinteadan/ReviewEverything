@@ -7,7 +7,7 @@ using ReviewEverything.Model;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace ReviewEverything.DataProvider.LocalStore
+namespace ReviewEverything.DataProvider.Storage
 {
     internal class ReviewItemLoader : ICanBeParsed
     {
