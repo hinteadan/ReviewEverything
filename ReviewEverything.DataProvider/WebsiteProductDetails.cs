@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 
 namespace ReviewEverything.DataProvider
 {
@@ -50,7 +51,10 @@ namespace ReviewEverything.DataProvider
                 .Replace("<br>", Environment.NewLine)
                 .Replace("<br />", Environment.NewLine);
 
-            return HtmlAgilityPack.HtmlEntity.DeEntitize(result).Trim();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(result);
+
+            return doc.DocumentNode.InnerText;
         }
     }
 }

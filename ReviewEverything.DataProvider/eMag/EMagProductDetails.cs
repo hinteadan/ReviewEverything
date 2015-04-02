@@ -147,11 +147,15 @@ namespace ReviewEverything.DataProvider.eMag
         private void PopulateImpressionWithDetails(ReviewItem.Impression impressionToPopulate, HtmlNode reviewDetailNode)
         {
             impressionToPopulate.By = reviewDetailNode.Descendants("div").WithClass("review_user_caption").Single().Elements("a").Single().InnerText.Trim();
+            var titleNode = reviewDetailNode.Descendants("div").WithClass("review_titlu").Single().Elements("a").Single();
             var commentNode = reviewDetailNode.Descendants("div").WithClass("review_body_full").Single();
+
+            string commentHtml = string.Format("<strong>{0}</strong><br/><br/>{1}", titleNode.InnerHtml, commentNode.InnerHtml);
+
             impressionToPopulate.Comment = new ReviewItem.RichContent
             {
-                Html = commentNode.InnerHtml,
-                Text = HtmlToText(commentNode.InnerHtml)
+                Html = commentHtml,
+                Text = HtmlToText(commentHtml)
             };
         }
     }
