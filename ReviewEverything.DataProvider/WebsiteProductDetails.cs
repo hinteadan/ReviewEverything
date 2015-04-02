@@ -32,5 +32,15 @@ namespace ReviewEverything.DataProvider
         }
 
         protected abstract ReviewItem Parse(string content);
+
+        protected string CleanSpecName(string name)
+        {
+            var trimmed = name.Trim();
+            if (trimmed[trimmed.Length - 1] == ':')
+            {
+                return trimmed.Substring(0, trimmed.Length - 1);
+            }
+            return trimmed;
+        }
     }
 }

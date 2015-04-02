@@ -102,15 +102,5 @@ namespace ReviewEverything.DataProvider.CelRo
                 })
                 .ToArray();
         }
-
-        private string CleanSpecName(string name)
-        {
-            var trimmed = name.Trim();
-            if (trimmed[trimmed.Length - 1] == ':')
-            {
-                return trimmed.Substring(0, trimmed.Length - 1);
-            }
-            return trimmed;
-        }
     }
 }
