@@ -25,9 +25,9 @@ namespace ReviewEverything.DataProvider.eMag
             var mainImageNode = htmlDoc.GetElementbyId("zoom-image").Element("img");
             string mainImagePath = string.Format("http:{0}", mainImageNode.GetAttributeValue("src", null));
 
-            var otherImagesNodes = htmlDoc.GetElementbyId("gallery-popup").Descendants("img").WithClass("zoomImg");
+            var otherImagesNodes = htmlDoc.GetElementbyId("product-pictures-carousel").Descendants("a").WithClass("gallery-image");
             var otherImgPaths = otherImagesNodes
-                .Select(n => string.Format("http:{0}", n.GetAttributeValue("src", null)))
+                .Select(n => string.Format("http:{0}", n.GetAttributeValue("href", null)))
                 .Where(p => !string.Equals(p, mainImagePath, StringComparison.InvariantCultureIgnoreCase))
                 .ToArray();
 
@@ -48,14 +48,39 @@ namespace ReviewEverything.DataProvider.eMag
             };
         }
 
-        private ReviewItem.Impression[] ParseReviews(HtmlNode reviewsNode)
-        {
-            throw new NotImplementedException();
-        }
-
         private ReviewItem.Specification[] ParseSpecs(HtmlNode specsNode)
         {
-            throw new NotImplementedException();
+            var specGridNodes = specsNode.Elements("div")
+                .WithClass("holder-specificatii")
+                .SelectMany(n =>
+                    n.Elements("div")
+                    .WithClass("box-specificatie")
+                    );
+
+            return specGridNodes.SelectMany(s =>
+            {
+                var names = s.Elements("p").WithClass("ch_title").ToArray();
+                var values = s.Elements("p").WithClass("ch_spec").ToArray();
+
+                ReviewItem.Specification[] specs = new ReviewItem.Specification[names.Length];
+
+                for (int i = 0; i < specs.Length; i++)
+                {
+                    specs[i] = new ReviewItem.Specification
+                    {
+                        Name = CleanSpecName(names[i].InnerText),
+                        Value = HtmlToText(values[i].InnerHtml).Trim()
+                    };
+                }
+
+                return specs;
+
+            }).ToArray();
+        }
+
+        private ReviewItem.Impression[] ParseReviews(HtmlNode reviewsNode)
+        {
+            return new ReviewItem.Impression[0];
         }
     }
 }

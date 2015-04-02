@@ -42,5 +42,15 @@ namespace ReviewEverything.DataProvider
             }
             return trimmed;
         }
+
+        protected string HtmlToText(string html)
+        {
+            var result = html
+                .Replace("<br/>", Environment.NewLine)
+                .Replace("<br>", Environment.NewLine)
+                .Replace("<br />", Environment.NewLine);
+
+            return HtmlAgilityPack.HtmlEntity.DeEntitize(result);
+        }
     }
 }

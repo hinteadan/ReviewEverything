@@ -18,7 +18,7 @@ namespace Playground
             var criteria = new SearchCriteria("nokia lumia 930");
             var result = new EMagSearch().SearchFor(criteria);
 
-            //var item = result.First().Parse();
+            var item = result.First().Parse();
 
             //var store = new LocalStore();
             //var item = store.SearchFor(criteria);
