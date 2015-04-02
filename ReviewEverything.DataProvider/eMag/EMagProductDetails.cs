@@ -80,7 +80,79 @@ namespace ReviewEverything.DataProvider.eMag
 
         private ReviewItem.Impression[] ParseReviews(HtmlNode reviewsNode)
         {
-            return new ReviewItem.Impression[0];
+            var reviewGridNode = reviewsNode.Descendants("div").WithAttribute("id", "grila_review").SingleOrDefault();
+
+            if (reviewGridNode == null)
+            {
+                return new ReviewItem.Impression[0];
+            }
+
+            ReviewItem.Impression[] impressions = ParseRatingCountsFromReviewsHeader(
+                reviewGridNode.Descendants("div").WithClass("rating-count").ToArray()
+                );
+
+            var reviewDetailsContainerNode = reviewsNode.Elements("div").WithAttribute("id", "rcontainer").SingleOrDefault();
+            if (reviewDetailsContainerNode != null)
+            {
+                PopulateImpressionsWithDetails(impressions, reviewDetailsContainerNode.Elements("div").WithClass("review_row"));
+            }
+
+            return impressions;
+        }
+
+        private ReviewItem.Impression[] ParseRatingCountsFromReviewsHeader(HtmlNode[] ratingCountNodes)
+        {
+            List<ReviewItem.Impression> impressions = new List<ReviewItem.Impression>();
+
+            for (int i = 0; i < ratingCountNodes.Length; i++)
+            {
+                decimal emagRatingValue = ratingCountNodes.Length - i;
+                byte rating = (byte)Math.Round(emagRatingValue / 5 * 100, 0);
+                int numberOfImpressions = int.Parse(ratingCountNodes[i].InnerText.Trim());
+                impressions.AddRange(GenerateEmptyImpressions(numberOfImpressions, rating));
+            }
+
+            return impressions.ToArray();
+        }
+
+        private IEnumerable<ReviewItem.Impression> GenerateEmptyImpressions(int numberOfImpressions, byte rating)
+        {
+            for (var i = 0; i < numberOfImpressions; i++)
+            {
+                yield return new ReviewItem.Impression { Rating = rating };
+            }
+        }
+
+        private void PopulateImpressionsWithDetails(ReviewItem.Impression[] impressions, IEnumerable<HtmlNode> reviewDetailNodes)
+        {
+            foreach (var reviewDetailNode in reviewDetailNodes)
+            {
+                var ratingNode = reviewDetailNode.Descendants("div").WithClass("star-rating-small-progress").Single();
+                string ratingString = ratingNode.GetAttributeValue("style", null);
+                if (ratingString == null)
+                {
+                    continue;
+                }
+                var rating = byte.Parse(ratingString.ToLowerInvariant().Replace("width:", string.Empty).Replace("%", string.Empty).Trim());
+                var impressionToPopulate = impressions.FirstOrDefault(i => i.By == null && i.Rating == rating);
+                if(impressionToPopulate == null)
+                {
+                    continue;
+                }
+
+                PopulateImpressionWithDetails(impressionToPopulate, reviewDetailNode);
+            }
+        }
+
+        private void PopulateImpressionWithDetails(ReviewItem.Impression impressionToPopulate, HtmlNode reviewDetailNode)
+        {
+            impressionToPopulate.By = reviewDetailNode.Descendants("div").WithClass("review_user_caption").Single().Elements("a").Single().InnerText.Trim();
+            var commentNode = reviewDetailNode.Descendants("div").WithClass("review_body_full").Single();
+            impressionToPopulate.Comment = new ReviewItem.RichContent
+            {
+                Html = commentNode.InnerHtml,
+                Text = HtmlToText(commentNode.InnerHtml)
+            };
         }
     }
 }

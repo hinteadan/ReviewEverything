@@ -50,7 +50,7 @@ namespace ReviewEverything.DataProvider
                 .Replace("<br>", Environment.NewLine)
                 .Replace("<br />", Environment.NewLine);
 
-            return HtmlAgilityPack.HtmlEntity.DeEntitize(result);
+            return HtmlAgilityPack.HtmlEntity.DeEntitize(result).Trim();
         }
     }
 }
