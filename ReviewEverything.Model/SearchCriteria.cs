@@ -10,11 +10,13 @@ namespace ReviewEverything.Model
     {
         private readonly string rawSearchString;
 
-        private SearchCriteria() { }
         public SearchCriteria(string searchString)
         {
             this.rawSearchString = searchString;
+            this.CreatedOn = DateTime.Now;
         }
+
+        public DateTime CreatedOn { get; set; }
 
         public string RawValue
         {
