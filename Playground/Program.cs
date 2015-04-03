@@ -4,6 +4,8 @@ using NLog.Config;
 using NLog.Targets;
 using NLog;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Playground
 {
@@ -13,9 +15,14 @@ namespace Playground
         {
             ConfigureLogging();
 
-            var criteria = new SearchCriteria("nokia lumia 830");
             var crawler = new Crawler();
-            var results = crawler.Crawl(criteria);
+
+            var criterias = new SearchCriteria[] { 
+                new SearchCriteria("samsung galaxy s5"),
+                new SearchCriteria("samsung galaxy s6")
+            };
+
+            Task.WaitAll(criterias.Select(c => crawler.Crawl(c)).ToArray());
 
             Console.WriteLine("Done");
             Console.ReadLine();

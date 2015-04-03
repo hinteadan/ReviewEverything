@@ -19,7 +19,7 @@ namespace ReviewEverything.DataProvider.eMag
 
             var name = htmlDoc.GetElementbyId("offer-title").Element("h1").InnerText;
             var detailsNode = htmlDoc.GetElementbyId("description_section");
-            var descriptionNode = detailsNode.Descendants("div").WithClass("preview_desc").SingleOrDefault();
+            var descriptionNode = detailsNode.Descendants("div").WithClass("preview_desc").FirstOrDefault();
 
             var mainImageNode = htmlDoc.GetElementbyId("zoom-image").Element("img");
             string mainImagePath = string.Format("http:{0}", mainImageNode.GetAttributeValue("src", null));

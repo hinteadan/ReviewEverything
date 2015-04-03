@@ -21,7 +21,7 @@ namespace ReviewEverything.DataProvider.CelRo
             var prodInfoNode = htmlDoc.DocumentNode.Descendants("div").WithClass("prod_info").Single();
 
             var name = prodInfoNode.Descendants("h2").WithAttribute("itemprop", "name").Single().InnerText;
-            var descriptionNode = prodInfoNode.Descendants("div").WithClass("descriere").Single();
+            var descriptionNode = prodInfoNode.Descendants("div").WithClass("descriere").SingleOrDefault();
 
             var imagesTable = htmlDoc.GetElementbyId("pzx");
             var mainImageNode = imagesTable.Descendants("td").First().Descendants("img").WithAttribute("itemprop", "image").SingleOrDefault();
@@ -46,7 +46,7 @@ namespace ReviewEverything.DataProvider.CelRo
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {
                 Name = name,
-                Description = new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText },
+                Description = descriptionNode != null ? new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText } : null,
                 MainImageUrl = mainImageUrl,
                 ImagesUrls = otherImages,
                 Price = price,
