@@ -11,7 +11,7 @@ namespace Playground
     {
         static void Main(string[] args)
         {
-            Configurelogging();
+            ConfigureLogging();
 
             var criteria = new SearchCriteria("nokia lumia 830");
             var crawler = new Crawler();
@@ -32,7 +32,7 @@ namespace Playground
             Console.ReadLine();
         }
 
-        private static void Configurelogging()
+        private static void ConfigureLogging()
         {
             var cfg = new LoggingConfiguration();
 
