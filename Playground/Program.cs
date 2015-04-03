@@ -15,18 +15,7 @@ namespace Playground
 
             var criteria = new SearchCriteria("nokia lumia 830");
             var crawler = new Crawler();
-
             var results = crawler.Crawl(criteria);
-
-
-            //var result = new EMagSearch().SearchFor(criteria);
-
-            //var item = result.First().Parse();
-
-            //var store = new LocalStore();
-            //var item = store.SearchFor(criteria);
-
-            //store.Persist(criteria, new ReviewItem[]{ item } );
 
             Console.WriteLine("Done");
             Console.ReadLine();
