@@ -60,7 +60,7 @@ namespace ReviewEverything.DataProvider
 
         public Task<ReviewItem> ParseAsync()
         {
-            return new Task<ReviewItem>(this.Parse);
+            return Task.Run<ReviewItem>(() => this.Parse());
         }
     }
 }

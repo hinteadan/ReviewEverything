@@ -20,16 +20,21 @@ namespace ReviewEverything.DataProvider.eMag
 
             var name = htmlDoc.GetElementbyId("offer-title").Element("h1").InnerText;
             var detailsNode = htmlDoc.GetElementbyId("description_section");
-            var descriptionNode = detailsNode.Descendants("div").WithClass("preview_desc").Single();
+            var descriptionNode = detailsNode.Descendants("div").WithClass("preview_desc").SingleOrDefault();
 
             var mainImageNode = htmlDoc.GetElementbyId("zoom-image").Element("img");
             string mainImagePath = string.Format("http:{0}", mainImageNode.GetAttributeValue("src", null));
 
-            var otherImagesNodes = htmlDoc.GetElementbyId("product-pictures-carousel").Descendants("a").WithClass("gallery-image");
-            var otherImgPaths = otherImagesNodes
-                .Select(n => string.Format("http:{0}", n.GetAttributeValue("href", null)))
-                .Where(p => !string.Equals(p, mainImagePath, StringComparison.InvariantCultureIgnoreCase))
-                .ToArray();
+            var otherImgPaths = new string[0];
+            var pictureCarouselNode = htmlDoc.GetElementbyId("product-pictures-carousel");
+            if (pictureCarouselNode != null)
+            {
+                var otherImagesNodes = htmlDoc.GetElementbyId("product-pictures-carousel").Descendants("a").WithClass("gallery-image");
+                otherImgPaths = otherImagesNodes
+                    .Select(n => string.Format("http:{0}", n.GetAttributeValue("href", null)))
+                    .Where(p => !string.Equals(p, mainImagePath, StringComparison.InvariantCultureIgnoreCase))
+                    .ToArray();
+            }
 
             var specsNode = htmlDoc.GetElementbyId("box-specificatii-produs");
             var reviewsNode = htmlDoc.GetElementbyId("new_reviews");
@@ -37,7 +42,7 @@ namespace ReviewEverything.DataProvider.eMag
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {
                 Name = name,
-                Description = new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText },
+                Description = descriptionNode != null ? new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText } : null,
                 MainImageUrl = mainImagePath,
                 ImagesUrls = otherImgPaths,
                 Price = this.Price,
@@ -148,7 +153,8 @@ namespace ReviewEverything.DataProvider.eMag
         {
             impressionToPopulate.By = reviewDetailNode.Descendants("div").WithClass("review_user_caption").Single().Elements("a").Single().InnerText.Trim();
             var titleNode = reviewDetailNode.Descendants("div").WithClass("review_titlu").Single().Elements("a").Single();
-            var commentNode = reviewDetailNode.Descendants("div").WithClass("review_body_full").Single();
+            var commentNode = reviewDetailNode.Descendants("div").WithClass("review_body_full").SingleOrDefault() ?? 
+                reviewDetailNode.Descendants("div").WithClass("review_body_truncated").Single();
 
             string commentHtml = string.Format("<strong>{0}</strong><br/><br/>{1}", titleNode.InnerHtml, commentNode.InnerHtml);
 

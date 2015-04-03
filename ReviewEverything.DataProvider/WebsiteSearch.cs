@@ -29,7 +29,7 @@ namespace ReviewEverything.DataProvider
 
         public Task<IEnumerable<ICanBeParsed>> SearchForAsync(SearchCriteria criteria)
         {
-            return new Task<IEnumerable<ICanBeParsed>>(() => this.SearchFor(criteria));
+            return Task.Run<IEnumerable<ICanBeParsed>>(() => this.SearchFor(criteria));
         }
     }
 }

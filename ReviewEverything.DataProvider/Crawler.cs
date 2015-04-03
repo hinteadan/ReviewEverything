@@ -17,24 +17,18 @@ namespace ReviewEverything.DataProvider
         };
         private readonly ICanStore localStore = new LocalStore();
 
-        private async Task<IEnumerable<ReviewItem>> CrawlAsync(SearchCriteria criteria)
+        public IEnumerable<ReviewItem> Crawl(SearchCriteria criteria)
         {
-            var crawlTasks = dataSources.Select(s => new Task<IEnumerable<ICanBeParsed>>(() => s.SearchFor(criteria))).ToArray();
-
-            var searchResults = await Task.WhenAll(crawlTasks);
-
-            var parseTasks = searchResults.Select(r => Parse(r));
-
-            throw new NotImplementedException();
-
-            //return Task.WhenAll(parseTasks).ContinueWith<ReviewItem[]>(async x => new Task (await x).SelectMany(r => r).ToArray());
+            return CrawlAsync(criteria).Result;
         }
 
-        private async Task<ReviewItem[]> Parse(IEnumerable<ICanBeParsed> searchResults)
+        public async Task<IEnumerable<ReviewItem>> CrawlAsync(SearchCriteria criteria)
         {
-            var parseTasks = searchResults.Select(x => new Task<ReviewItem>(() => x.Parse()));
+            var searchResuts = await Task.WhenAll(dataSources.Select(s => s.SearchForAsync(criteria)));
 
-            return await Task<IEnumerable<ReviewItem>>.WhenAll(parseTasks);
+            var reviewItems = await Task.WhenAll(searchResuts.SelectMany(x => x).Select(i => i.ParseAsync()));
+
+            return reviewItems;
         }
 
     }

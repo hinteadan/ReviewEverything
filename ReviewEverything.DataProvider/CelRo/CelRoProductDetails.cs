@@ -26,7 +26,9 @@ namespace ReviewEverything.DataProvider.CelRo
             var descriptionNode = prodInfoNode.Descendants("div").WithClass("descriere").Single();
 
             var imagesTable = htmlDoc.GetElementbyId("pzx");
-            var mainImageUrl = imagesTable.Descendants("td").First().Descendants("img").WithAttribute("itemprop", "image").Single().Attributes["src"].Value;
+            var mainImageNode = imagesTable.Descendants("td").First().Descendants("img").WithAttribute("itemprop", "image").SingleOrDefault();
+            var mainImageUrl = mainImageNode != null ? mainImageNode.GetAttributeValue("src", null) : null;
+
             var otherimagesNode = imagesTable.Descendants("div").WithClass("poze_secundare").SingleOrDefault();
             var otherImages = otherimagesNode != null ?
                 otherimagesNode.Descendants("img").Select(n => n.Attributes["src"].Value).ToArray() :

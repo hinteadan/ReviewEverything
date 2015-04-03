@@ -8,6 +8,7 @@ using ReviewEverything.DataProvider.CelRo;
 using ReviewEverything.DataProvider.eMag;
 using ReviewEverything.Model;
 using ReviewEverything.DataProvider.Storage;
+using ReviewEverything.DataProvider;
 
 namespace Playground
 {
@@ -16,9 +17,14 @@ namespace Playground
         static void Main(string[] args)
         {
             var criteria = new SearchCriteria("nokia lumia 930");
-            var result = new EMagSearch().SearchFor(criteria);
+            var crawler = new Crawler();
 
-            var item = result.First().Parse();
+            crawler.Crawl(criteria);
+
+
+            //var result = new EMagSearch().SearchFor(criteria);
+
+            //var item = result.First().Parse();
 
             //var store = new LocalStore();
             //var item = store.SearchFor(criteria);
