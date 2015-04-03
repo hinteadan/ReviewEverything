@@ -29,7 +29,7 @@ namespace ReviewEverything.DataProvider
 
         public ReviewItem Parse()
         {
-            return Parse(HttpOperations.Get(this.productDetailsUrl));
+            return Parse(HttpOperations.Get(this.productDetailsUrl).Result);
         }
 
         protected abstract ReviewItem Parse(string content);

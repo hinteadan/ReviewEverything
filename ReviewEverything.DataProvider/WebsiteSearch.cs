@@ -14,7 +14,7 @@ namespace ReviewEverything.DataProvider
 
         public IEnumerable<ICanBeParsed> SearchFor(SearchCriteria criteria)
         {
-            return ParseSearchResult(HttpOperations.Get(SearchEndpointFor(criteria)));
+            return ParseSearchResult(HttpOperations.Get(SearchEndpointFor(criteria)).Result);
         }
 
         protected virtual string SearchEndpointFor(SearchCriteria criteria)
