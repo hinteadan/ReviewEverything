@@ -16,10 +16,31 @@ namespace ReviewEverything.DataProvider
             new CelRo.CelRoSearch()
         };
         private readonly ICanStore localStore = new LocalStore();
+        private readonly TimeSpan resultsExpireIn = TimeSpan.FromDays(180);
 
         public IEnumerable<ReviewItem> Crawl(SearchCriteria criteria)
         {
-            return CrawlAsync(criteria).Result;
+            var existingCriteria = localStore
+                .Find<SearchCriteria>(f => string.Equals(f["Value"], criteria.RawValue, StringComparison.InvariantCultureIgnoreCase))
+                .SingleOrDefault();
+
+            if(existingCriteria != null && !IsCriteriaExpired(existingCriteria))
+            {
+                return localStore.SearchFor(existingCriteria).Select(r => r.Parse());
+            }
+            else if(IsCriteriaExpired(existingCriteria))
+            {
+                CleanupExpiredResultsForCriteria(existingCriteria);
+            }
+
+            var result = CrawlAsync(criteria).Result;
+            localStore.Persist(criteria, result);
+            return result;
+        }
+
+        private void CleanupExpiredResultsForCriteria(SearchCriteria existingCriteria)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<ReviewItem>> CrawlAsync(SearchCriteria criteria)
@@ -31,5 +52,9 @@ namespace ReviewEverything.DataProvider
             return reviewItems;
         }
 
+        private bool IsCriteriaExpired(SearchCriteria criteria)
+        {
+            return DateTime.Now - criteria.CreatedOn > resultsExpireIn;
+        }
     }
 }

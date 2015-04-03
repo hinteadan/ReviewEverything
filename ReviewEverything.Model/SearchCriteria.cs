@@ -8,7 +8,7 @@ namespace ReviewEverything.Model
 {
     public class SearchCriteria
     {
-        private readonly string rawSearchString;
+        private string rawSearchString;
 
         public SearchCriteria(string searchString)
         {
@@ -23,6 +23,10 @@ namespace ReviewEverything.Model
             get
             {
                 return this.rawSearchString;
+            }
+            set
+            {
+                this.rawSearchString = value;
             }
         }
 

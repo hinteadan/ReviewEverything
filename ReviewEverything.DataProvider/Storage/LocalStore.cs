@@ -208,7 +208,6 @@ namespace ReviewEverything.DataProvider.Storage
                 .ToArray();
         }
 
-
         public Task PersistAsync(SearchCriteria criteria, IEnumerable<ReviewItem> items)
         {
             return Task.Run(() => this.Persist(criteria, items));
@@ -222,6 +221,27 @@ namespace ReviewEverything.DataProvider.Storage
         public Task<IEnumerable<ICanBeParsed>> SearchForAsync(SearchCriteria criteria)
         {
             return Task.Run<IEnumerable<ICanBeParsed>>(() => this.SearchFor(criteria));
+        }
+
+        public IEnumerable<T> Find<T>(Predicate<Dictionary<string, string>> indexPredicate)
+        {
+            if (!documentsIndexDictionary.Keys.Any())
+            {
+                UpdateDocumentIndex();
+            }
+
+            var type = typeof(T).AssemblyQualifiedName;
+
+            return documentsIndexDictionary
+                .Values
+                .Where(v => v.Type == type)
+                .Where(v => indexPredicate(v.Fields))
+                .Select(v => LoadDocument<T>(v.Id).Payload);
+        }
+
+        private StoreDocument<T> LoadDocument<T>(Guid id)
+        {
+            return JsonConvert.DeserializeObject<StoreDocument<T>>(File.ReadAllText(string.Format(@"{0}\{1}", documentsPath, id)));
         }
     }
 }

@@ -10,6 +10,7 @@ namespace ReviewEverything.Model
     {
         void Persist(SearchCriteria criteria, IEnumerable<ReviewItem> items);
         ReviewItem Retrieve(Uri reference);
+        IEnumerable<T> Find<T>(Predicate<Dictionary<string, string>> indexPredicate);
 
         Task PersistAsync(SearchCriteria criteria, IEnumerable<ReviewItem> items);
         Task<ReviewItem> RetrieveAsync(Uri reference);

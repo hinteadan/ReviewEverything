@@ -19,7 +19,7 @@ namespace Playground
             var criteria = new SearchCriteria("nokia lumia 930");
             var crawler = new Crawler();
 
-            crawler.Crawl(criteria);
+            var results = crawler.Crawl(criteria);
 
 
             //var result = new EMagSearch().SearchFor(criteria);
