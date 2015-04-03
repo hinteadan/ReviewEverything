@@ -1,14 +1,9 @@
-﻿using HtmlAgilityPack;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ReviewEverything.DataProvider.CelRo;
-using ReviewEverything.DataProvider.eMag;
-using ReviewEverything.Model;
-using ReviewEverything.DataProvider.Storage;
+﻿using ReviewEverything.Model;
 using ReviewEverything.DataProvider;
+using NLog.Config;
+using NLog.Targets;
+using NLog;
+using System;
 
 namespace Playground
 {
@@ -16,6 +11,8 @@ namespace Playground
     {
         static void Main(string[] args)
         {
+            Configurelogging();
+
             var criteria = new SearchCriteria("nokia lumia 930");
             var crawler = new Crawler();
 
@@ -30,6 +27,21 @@ namespace Playground
             //var item = store.SearchFor(criteria);
 
             //store.Persist(criteria, new ReviewItem[]{ item } );
+
+            Console.WriteLine("Done");
+            Console.ReadLine();
+        }
+
+        private static void Configurelogging()
+        {
+            var cfg = new LoggingConfiguration();
+
+            var consoleTarget = new ColoredConsoleTarget();
+            cfg.AddTarget("Console", consoleTarget);
+
+            cfg.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
+
+            LogManager.Configuration = cfg;
         }
     }
 }
