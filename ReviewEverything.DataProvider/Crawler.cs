@@ -19,7 +19,7 @@ namespace ReviewEverything.DataProvider
         private readonly ICanStore localStore = new LocalStore();
         private readonly TimeSpan resultsExpireIn = TimeSpan.FromDays(180);
 
-        public IEnumerable<ReviewItem> Crawl(SearchCriteria criteria)
+        public async Task<IEnumerable<ReviewItem>> Crawl(SearchCriteria criteria)
         {
             log.Trace("Start crawling for '{0}'", criteria.RawValue);
 
@@ -38,7 +38,7 @@ namespace ReviewEverything.DataProvider
                 CleanupExpiredResultsForCriteria(existingCriteria);
             }
 
-            var result = CrawlAsync(criteria).Result;
+            var result = await CrawlAsync(criteria);
             localStore.Persist(criteria, result);
             return result;
         }
@@ -49,7 +49,7 @@ namespace ReviewEverything.DataProvider
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<ReviewItem>> CrawlAsync(SearchCriteria criteria)
+        private async Task<IEnumerable<ReviewItem>> CrawlAsync(SearchCriteria criteria)
         {
             log.Trace("Crawling search results for '{0}'", criteria.RawValue);
             var searchResuts = await Task.WhenAll(dataSources.Select(s => s.SearchForAsync(criteria)));
