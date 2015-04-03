@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Recognos.Core;
 using ReviewEverything.Model;
 using HtmlAgilityPack;
-using ReviewEverything.DataProvider;
 using System.Globalization;
 
 namespace ReviewEverything.DataProvider.CelRo
@@ -19,6 +15,8 @@ namespace ReviewEverything.DataProvider.CelRo
         {
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(content);
+
+            Log.Trace("Parsing CEL.ro product details from {0}", productDetailsUrl);
 
             var prodInfoNode = htmlDoc.DocumentNode.Descendants("div").WithClass("prod_info").Single();
 
@@ -42,6 +40,8 @@ namespace ReviewEverything.DataProvider.CelRo
                 .Descendants("meta").WithAttribute("itemprop", "priceCurrency").Single().Attributes["content"].Value.Trim();
 
             var specsTableNode = prodInfoNode.Element("table");
+
+            Log.Trace("Successfully parsed CEL.ro product details from {0}", productDetailsUrl);
 
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {

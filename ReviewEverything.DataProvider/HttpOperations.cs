@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
+using NLog;
 
 namespace ReviewEverything.DataProvider
 {
     internal static class HttpOperations
     {
+        private static Logger log = LogManager.GetCurrentClassLogger();
         private static ConcurrentDictionary<string, RequestInfo> requests = new ConcurrentDictionary<string, RequestInfo>();
 
         public static Task<string> Get(string url)
         {
+            log.Trace("Trying HTTP GET {0}", url);
             return Task.Run<string>(() =>
             {
                 var domain = new Uri(url, UriKind.Absolute).Host;
@@ -26,6 +26,7 @@ namespace ReviewEverything.DataProvider
 
                 if (requests[domain].IsHot())
                 {
+                    log.Info("Domain \"{0}\" is hot. Waiting {1} seconds for cooldown.", domain, RequestInfo.Cooldown.TotalSeconds);
                     Task.WaitAll(Task.Run(() =>
                         Task.Delay(RequestInfo.Cooldown)
                         .ContinueWith(t =>
@@ -35,6 +36,7 @@ namespace ReviewEverything.DataProvider
                         ));
                 }
 
+                log.Trace("Requesting HTTP GET {0}", url);
                 HttpWebRequest request = HttpWebRequest.CreateHttp(url);
                 var response = request.GetResponse() as HttpWebResponse;
 
@@ -47,6 +49,7 @@ namespace ReviewEverything.DataProvider
             });
         }
     }
+
     internal class RequestInfo
     {
         private static TimeSpan cooldown = TimeSpan.FromSeconds(15);

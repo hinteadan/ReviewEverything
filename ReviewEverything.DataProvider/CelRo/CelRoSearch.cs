@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using ReviewEverything.Model;
-using ReviewEverything.DataProvider;
 
 namespace ReviewEverything.DataProvider.CelRo
 {
@@ -26,10 +20,13 @@ namespace ReviewEverything.DataProvider.CelRo
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(content);
 
+            Log.Trace("Parsing CEL.ro search results");
+
             var resultsArea = htmlDoc.DocumentNode.Descendants().WithClass("productlisting").Single();
 
             if (resultsArea.Descendants("div").WithClass("fara_produse").SingleOrDefault() != null)
             {
+                Log.Trace("Found no results, no review items to parse");
                 return Enumerable.Empty<ICanBeParsed>();
             }
 
@@ -38,6 +35,7 @@ namespace ReviewEverything.DataProvider.CelRo
 
         private IEnumerable<ICanBeParsed> ParseSearchResultHtmlItems(HtmlNode resultsArea)
         {
+            Log.Trace("Parsing search result items");
             return resultsArea
                 .Descendants("div")
                 .WithClass("productListing-tot")
@@ -47,6 +45,8 @@ namespace ReviewEverything.DataProvider.CelRo
 
         private ICanBeParsed ParseResultHtmlItem(HtmlNode item)
         {
+            Log.Trace("Parsing search result item");
+
             var imageNode = item.Descendants("div").WithClass("productListing-poza").Single();
             var imageUrl = imageNode.Descendants("a").Single().FirstChild.Attributes["src"].Value;
 
@@ -67,6 +67,7 @@ namespace ReviewEverything.DataProvider.CelRo
             var productDetailsUrl = productAnchor.Attributes["href"].Value;
             var productName = productAnchor.InnerText.Trim();
 
+            Log.Trace("Successfully parsed item '{0}' ; Reference: {1}", productName, productDetailsUrl);
 
             return new CelRoProductDetails(productDetailsUrl)
             {

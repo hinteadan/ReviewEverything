@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ReviewEverything.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Reflection;
+using NLog;
 
 namespace ReviewEverything.DataProvider.Storage
 {
@@ -31,6 +30,8 @@ namespace ReviewEverything.DataProvider.Storage
 
     public class LocalStore : ICanStore
     {
+        private static Logger log = LogManager.GetCurrentClassLogger();
+
         private const string stringPairJoint = ":=:";
         private readonly string storeBasePath;
         private const string indexFileName = "index.json";
@@ -176,6 +177,8 @@ namespace ReviewEverything.DataProvider.Storage
 
         private IEnumerable<StoreDocument<ReviewItem>> PersistItems(IEnumerable<ReviewItem> items)
         {
+            log.Trace("Persisting {0} review items to local disk", items.Count());
+
             foreach (var item in items)
             {
                 var doc = new StoreDocument<ReviewItem>
@@ -190,6 +193,8 @@ namespace ReviewEverything.DataProvider.Storage
 
         private StoreIndexEntry PersistSearchCriteria(SearchCriteria criteria, IEnumerable<StoreDocument<ReviewItem>> storedReviewItems)
         {
+            log.Trace("Persisting search criteria '{0}' to local disk", criteria.RawValue);
+
             StoreDocument<SearchCriteria> doc = new StoreDocument<SearchCriteria>
             {
                 Id = Guid.NewGuid(),

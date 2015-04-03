@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Recognos.Core;
 using ReviewEverything.Model;
+using NLog;
 
 namespace ReviewEverything.DataProvider
 {
@@ -12,8 +10,16 @@ namespace ReviewEverything.DataProvider
     {
         protected abstract string UrlPattern { get; }
 
+        protected Logger Log { get; private set; }
+
+        protected WebsiteSearch()
+        {
+            this.Log = LogManager.GetLogger(this.GetType().FullName);
+        }
+
         public IEnumerable<ICanBeParsed> SearchFor(SearchCriteria criteria)
         {
+            Log.Trace("Search Website for: {0}", criteria.RawValue);
             return ParseSearchResult(HttpOperations.Get(SearchEndpointFor(criteria)).Result);
         }
 
@@ -25,7 +31,6 @@ namespace ReviewEverything.DataProvider
         }
 
         protected abstract IEnumerable<ICanBeParsed> ParseSearchResult(string content);
-
 
         public Task<IEnumerable<ICanBeParsed>> SearchForAsync(SearchCriteria criteria)
         {

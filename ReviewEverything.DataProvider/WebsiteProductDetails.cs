@@ -1,11 +1,9 @@
 ﻿using Recognos.Core;
 using ReviewEverything.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using NLog;
 
 namespace ReviewEverything.DataProvider
 {
@@ -13,11 +11,14 @@ namespace ReviewEverything.DataProvider
     {
         protected readonly string productDetailsUrl;
 
+        protected Logger Log { get; private set; }
+
         public WebsiteProductDetails(string url)
         {
             Check.Condition(Uri.IsWellFormedUriString(url, UriKind.Absolute), "The given product details URL is invalid!");
 
             this.productDetailsUrl = url;
+            this.Log = LogManager.GetLogger(this.GetType().FullName);
         }
 
         public string Name { get; set; }

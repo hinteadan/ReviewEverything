@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Recognos.Core">
       <HintPath>..\packages\Recognos.Core.2.0.6\lib\net451\Recognos.Core.dll</HintPath>
     </Reference>

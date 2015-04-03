@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Recognos.Core;
 using ReviewEverything.Model;
 using HtmlAgilityPack;
 
@@ -17,6 +14,8 @@ namespace ReviewEverything.DataProvider.eMag
         {
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(content);
+
+            Log.Trace("Parsing eMag.ro product details from {0}", productDetailsUrl);
 
             var name = htmlDoc.GetElementbyId("offer-title").Element("h1").InnerText;
             var detailsNode = htmlDoc.GetElementbyId("description_section");
@@ -38,6 +37,8 @@ namespace ReviewEverything.DataProvider.eMag
 
             var specsNode = htmlDoc.GetElementbyId("box-specificatii-produs");
             var reviewsNode = htmlDoc.GetElementbyId("new_reviews");
+
+            Log.Trace("Successfully parsed eMag.ro product details from {0}", productDetailsUrl);
 
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {
