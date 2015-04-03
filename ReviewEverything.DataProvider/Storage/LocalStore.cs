@@ -7,9 +7,28 @@ using System.Text;
 using System.Threading.Tasks;
 using ReviewEverything.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace ReviewEverything.DataProvider.Storage
 {
+    public class LocalStoreJsonContractResolver : DefaultContractResolver
+    {
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+        {
+            var properties = base.CreateProperties(type, memberSerialization);
+
+            if (type == typeof(SearchCriteria))
+            {
+                var property = properties.Single(x => x.PropertyName == "RawValue");
+                property.Readable = true;
+                property.Writable = true;
+            }
+
+            return properties;
+        }
+    }
+
     public class LocalStore : ICanStore
     {
         private const string stringPairJoint = ":=:";
@@ -20,6 +39,11 @@ namespace ReviewEverything.DataProvider.Storage
         private readonly string documentsPath;
         private readonly FileSystemWatcher indexWatcher;
         private bool isIndexUpdatedBySelf = false;
+
+        private readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings 
+        { 
+            ContractResolver = new LocalStoreJsonContractResolver()
+        };
 
         private Dictionary<Guid, StoreIndexEntry> documentsIndexDictionary = new Dictionary<Guid, StoreIndexEntry>();
 
@@ -241,7 +265,7 @@ namespace ReviewEverything.DataProvider.Storage
 
         private StoreDocument<T> LoadDocument<T>(Guid id)
         {
-            return JsonConvert.DeserializeObject<StoreDocument<T>>(File.ReadAllText(string.Format(@"{0}\{1}", documentsPath, id)));
+            return JsonConvert.DeserializeObject<StoreDocument<T>>(File.ReadAllText(string.Format(@"{0}\{1}", documentsPath, id)), jsonSettings);
         }
     }
 }

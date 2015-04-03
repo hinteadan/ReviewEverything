@@ -24,7 +24,7 @@ namespace ReviewEverything.Model
             {
                 return this.rawSearchString;
             }
-            set
+            private set
             {
                 this.rawSearchString = value;
             }
