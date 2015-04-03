@@ -13,7 +13,7 @@ namespace Playground
         {
             Configurelogging();
 
-            var criteria = new SearchCriteria("nokia lumia 930");
+            var criteria = new SearchCriteria("nokia lumia 830");
             var crawler = new Crawler();
 
             var results = crawler.Crawl(criteria);

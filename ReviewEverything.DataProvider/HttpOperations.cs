@@ -24,16 +24,12 @@ namespace ReviewEverything.DataProvider
                     requests.TryAdd(domain, RequestInfo.CreateFor(domain));
                 }
 
-                if (requests[domain].IsHot())
+                while (requests[domain].IsHot())
                 {
                     log.Info("Domain \"{0}\" is hot. Waiting {1} seconds for cooldown.", domain, RequestInfo.Cooldown.TotalSeconds);
-                    Task.WaitAll(Task.Run(() =>
-                        Task.Delay(RequestInfo.Cooldown)
-                        .ContinueWith(t =>
-                        {
-                            requests[domain].Reset();
-                        })
-                        ));
+                    Task.WaitAll(Task.Run(() =>Task.Delay(RequestInfo.Cooldown)));
+
+                    requests[domain].Reset();
                 }
 
                 log.Trace("Requesting HTTP GET {0}", url);
@@ -52,8 +48,8 @@ namespace ReviewEverything.DataProvider
 
     internal class RequestInfo
     {
-        private static TimeSpan cooldown = TimeSpan.FromSeconds(15);
-        private static byte hotWire = 5;
+        private static TimeSpan cooldown = TimeSpan.FromSeconds(20);
+        private static byte hotWire = 4;
 
         private RequestInfo() { }
 

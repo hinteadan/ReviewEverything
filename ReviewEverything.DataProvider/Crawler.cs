@@ -32,7 +32,7 @@ namespace ReviewEverything.DataProvider
                 log.Trace("We have local results for '{0}', no need to hit the WWW", criteria.RawValue);
                 return localStore.SearchFor(existingCriteria).Select(r => r.Parse());
             }
-            else if(IsCriteriaExpired(existingCriteria))
+            else if(existingCriteria != null && IsCriteriaExpired(existingCriteria))
             {
                 log.Trace("We have some local results for '{0}', but expired!", criteria.RawValue);
                 CleanupExpiredResultsForCriteria(existingCriteria);
