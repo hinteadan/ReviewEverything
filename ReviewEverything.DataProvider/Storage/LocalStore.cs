@@ -207,5 +207,22 @@ namespace ReviewEverything.DataProvider.Storage
                 })
                 .ToArray();
         }
+
+
+        public Task PersistAsync(SearchCriteria criteria, IEnumerable<ReviewItem> items)
+        {
+            return new Task(() => this.Persist(criteria, items));
+        }
+
+        public Task<ReviewItem> RetrieveAsync(Uri reference)
+        {
+            return new Task<ReviewItem>(() => this.Retrieve(reference));
+        }
+
+
+        public Task<IEnumerable<ICanBeParsed>> SearchForAsync(SearchCriteria criteria)
+        {
+            return new Task<IEnumerable<ICanBeParsed>>(() => this.SearchFor(criteria));
+        }
     }
 }

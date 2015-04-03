@@ -9,5 +9,6 @@ namespace ReviewEverything.Model
     public interface ICanBeParsed
     {
         ReviewItem Parse();
+        Task<ReviewItem> ParseAsync();
     }
 }

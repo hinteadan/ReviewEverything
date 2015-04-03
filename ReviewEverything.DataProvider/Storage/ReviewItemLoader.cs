@@ -31,5 +31,11 @@ namespace ReviewEverything.DataProvider.Storage
 
             return JsonConvert.DeserializeObject<StoreDocument<ReviewItem>>(File.ReadAllText(docFilePath)).Payload;
         }
+
+
+        public Task<ReviewItem> ParseAsync()
+        {
+            return new Task<ReviewItem>(this.Parse);
+        }
     }
 }

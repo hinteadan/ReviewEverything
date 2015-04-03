@@ -9,5 +9,6 @@ namespace ReviewEverything.Model
     public interface ICanBeSearched
     {
         IEnumerable<ICanBeParsed> SearchFor(SearchCriteria criteria);
+        Task<IEnumerable<ICanBeParsed>> SearchForAsync(SearchCriteria criteria);
     }
 }

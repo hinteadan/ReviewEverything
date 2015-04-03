@@ -10,5 +10,8 @@ namespace ReviewEverything.Model
     {
         void Persist(SearchCriteria criteria, IEnumerable<ReviewItem> items);
         ReviewItem Retrieve(Uri reference);
+
+        Task PersistAsync(SearchCriteria criteria, IEnumerable<ReviewItem> items);
+        Task<ReviewItem> RetrieveAsync(Uri reference);
     }
 }

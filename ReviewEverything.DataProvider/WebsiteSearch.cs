@@ -25,5 +25,11 @@ namespace ReviewEverything.DataProvider
         }
 
         protected abstract IEnumerable<ICanBeParsed> ParseSearchResult(string content);
+
+
+        public Task<IEnumerable<ICanBeParsed>> SearchForAsync(SearchCriteria criteria)
+        {
+            return new Task<IEnumerable<ICanBeParsed>>(() => this.SearchFor(criteria));
+        }
     }
 }
