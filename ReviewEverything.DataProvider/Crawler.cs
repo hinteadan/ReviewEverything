@@ -13,8 +13,9 @@ namespace ReviewEverything.DataProvider
         private static Logger log = LogManager.GetCurrentClassLogger();
         private readonly ICanBeSearched[] dataSources = new ICanBeSearched[] 
         { 
-            new eMag.EMagSearch(),
-            new CelRo.CelRoSearch()
+            //new eMag.EMagSearch(),
+            //new CelRo.CelRoSearch(),
+            new AmazonCom.AmazonSearch(),
         };
         private readonly ICanStore localStore = new LocalStore();
         private readonly TimeSpan resultsExpireIn = TimeSpan.FromDays(180);

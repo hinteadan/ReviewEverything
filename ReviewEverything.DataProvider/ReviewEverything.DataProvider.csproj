@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmazonCom\AmazonProduct.cs" />
+    <Compile Include="AmazonCom\AmazonSearch.cs" />
     <Compile Include="CelRo\CelRoProductDetails.cs" />
     <Compile Include="CelRo\CelRoSearch.cs" />
     <Compile Include="Crawler.cs" />

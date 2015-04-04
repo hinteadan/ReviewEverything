@@ -18,8 +18,7 @@ namespace Playground
             var crawler = new Crawler();
 
             var criterias = new SearchCriteria[] { 
-                new SearchCriteria("samsung galaxy s5"),
-                new SearchCriteria("samsung galaxy s6")
+                new SearchCriteria("samsung galaxy s5")
             };
 
             Task.WaitAll(criterias.Select(c => crawler.Crawl(c)).ToArray());
@@ -36,6 +35,12 @@ namespace Playground
             cfg.AddTarget("Console", consoleTarget);
 
             cfg.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
+
+            var fileTarget = new FileTarget();
+            fileTarget.FileName = @"Logs\Log.txt";
+            cfg.AddTarget("File", fileTarget);
+
+            cfg.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
 
             LogManager.Configuration = cfg;
         }
