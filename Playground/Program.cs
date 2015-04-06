@@ -22,7 +22,8 @@ namespace Playground
                 new SearchCriteria("samsung galaxy s5")
             };
 
-            var res = new AmazonSearch().SearchFor(criterias[0]);
+            var prod = new AmazonProduct("http://www.amazon.com/ASUS-15-Inch-X551MAV-Laptop-VERSION/dp/B00L49X8E6/ref=sr_1_2?s=electronics&ie=UTF8&qid=1428321029&sr=1-2&keywords=asus+laptop")
+                .Parse();
 
             //Task.WaitAll(criterias.Select(c => crawler.Crawl(c)).ToArray());
 
