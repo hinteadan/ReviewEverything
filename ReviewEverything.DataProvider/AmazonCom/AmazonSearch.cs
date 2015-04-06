@@ -74,14 +74,34 @@ namespace ReviewEverything.DataProvider.AmazonCom
                 oldPrice = ParsePrice(oldPriceNode.InnerText);
             }
 
+            byte? rating = null;
+            var ratingNode = searchItemNode.Descendants("i").WithClass("a-icon-star").SingleOrDefault();
+            if(ratingNode != null)
+            {
+                rating = ParseRating(ratingNode);
+            }
+
             return new AmazonProduct(url)
             {
                 Name = name,
                 ThumbnailUrl = imageUrl,
                 Price = price,
                 Currency = "$",
-                OldPrice = oldPrice != -1 ? (decimal?)oldPrice : null
+                OldPrice = oldPrice != -1 ? (decimal?)oldPrice : null,
+                Rating = rating
             };
+        }
+
+        private byte? ParseRating(HtmlNode ratingNode)
+        {
+            string ratingText = ratingNode.InnerText.Trim();
+            ratingText = ratingText.Substring(0, ratingText.IndexOf(' '));
+            decimal amazonRating;
+            if(!decimal.TryParse(ratingText, NumberStyles.Any, CultureInfo.InvariantCulture, out amazonRating))
+            {
+                return null;
+            }
+            return (byte)Math.Round(amazonRating / 5 * 100, 0);
         }
 
         private decimal ParsePrice(string priceString)
