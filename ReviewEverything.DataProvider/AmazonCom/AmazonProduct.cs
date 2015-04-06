@@ -17,14 +17,12 @@ namespace ReviewEverything.DataProvider.AmazonCom
 
             var descriptionNode = htmlDoc.GetElementbyId("productDescription").Descendants("div").WithClass("productDescriptionWrapper").SingleOrDefault();
 
-
-
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {
-                Name = htmlDoc.GetElementbyId("productTitle").InnerText.Trim(),
+                Name = htmlDoc.GetElementbyId("btAsinTitle").InnerText.Trim(),
                 Description = descriptionNode != null ? new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText } : null,
-                MainImageUrl = htmlDoc.GetElementbyId("landingImage").GetAttributeValue("src", null),
-                ImagesUrls = ParseOtherImages(htmlDoc.GetElementbyId("altImages")),
+                MainImageUrl = htmlDoc.GetElementbyId("main-image").GetAttributeValue("src", null),
+                ImagesUrls = ParseOtherImages(htmlDoc.GetElementbyId("thumbs-image")),
                 Price = this.Price,
                 OldPrice = this.OldPrice,
                 Currency = this.Currency,
@@ -43,7 +41,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
             var techDetailsNode = detailsNode
                 .Descendants("div")
                 .WithClass("techD")
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             if(techDetailsNode == null)
             {
@@ -68,13 +66,10 @@ namespace ReviewEverything.DataProvider.AmazonCom
             }
 
             return altImagesNode
-                .Element("ul")
-                .Elements("li")
-                .WithClass("item")
-                .Select(x => x.Descendants("img")
-                        .Single()
-                        .GetAttributeValue("src", string.Empty)
-                        .Replace("40_.", "600_.")
+                .Elements("img")
+                .Select(x => 
+                        x.GetAttributeValue("src", string.Empty)
+                        .Replace("._SX38_SY50_CR,0,0,38,50_.", "._SX600_SY600_CR,0,0,600,600_.")
                 ).ToArray();
 
         }
