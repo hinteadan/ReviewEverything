@@ -6,6 +6,7 @@ using NLog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ReviewEverything.DataProvider.AmazonCom;
 
 namespace Playground
 {
@@ -21,7 +22,9 @@ namespace Playground
                 new SearchCriteria("samsung galaxy s5")
             };
 
-            Task.WaitAll(criterias.Select(c => crawler.Crawl(c)).ToArray());
+            var res = new AmazonSearch().SearchFor(criterias[0]);
+
+            //Task.WaitAll(criterias.Select(c => crawler.Crawl(c)).ToArray());
 
             Console.WriteLine("Done");
             Console.ReadLine();

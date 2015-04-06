@@ -4,14 +4,11 @@ using System.Threading.Tasks;
 
 namespace ReviewEverything.DataProvider.AmazonCom
 {
-    public class AmazonProduct : ICanBeParsed
+    public class AmazonProduct : WebsiteProductDetails
     {
-        public ReviewItem Parse()
-        {
-            throw new NotImplementedException();
-        }
+        public AmazonProduct(string url) : base(url) { }
 
-        public Task<ReviewItem> ParseAsync()
+        protected override ReviewItem Parse(string content)
         {
             throw new NotImplementedException();
         }

@@ -58,7 +58,6 @@ namespace ReviewEverything.DataProvider
             return doc.DocumentNode.InnerText;
         }
 
-
         public Task<ReviewItem> ParseAsync()
         {
             return Task.Run<ReviewItem>(() => this.Parse());
