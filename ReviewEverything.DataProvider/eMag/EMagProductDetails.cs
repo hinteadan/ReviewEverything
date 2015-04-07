@@ -13,9 +13,10 @@ namespace ReviewEverything.DataProvider.eMag
         protected override ReviewItem Parse(string content)
         {
             HtmlDocument htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(content);
 
             Log.Trace("Parsing eMag.ro product details from {0}", productDetailsUrl);
+
+            htmlDoc.LoadHtml(content);
 
             var name = htmlDoc.GetElementbyId("offer-title").Element("h1").InnerText;
             var detailsNode = htmlDoc.GetElementbyId("description_section");

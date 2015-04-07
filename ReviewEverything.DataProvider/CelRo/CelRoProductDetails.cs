@@ -14,9 +14,10 @@ namespace ReviewEverything.DataProvider.CelRo
         protected override ReviewItem Parse(string content)
         {
             HtmlDocument htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(content);
 
             Log.Trace("Parsing CEL.ro product details from {0}", productDetailsUrl);
+
+            htmlDoc.LoadHtml(content);
 
             var prodInfoNode = htmlDoc.DocumentNode.Descendants("div").WithClass("prod_info").Single();
 
