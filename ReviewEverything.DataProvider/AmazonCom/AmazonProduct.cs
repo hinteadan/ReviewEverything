@@ -22,7 +22,12 @@ namespace ReviewEverything.DataProvider.AmazonCom
 
             htmlDoc.LoadHtml(content);
 
-            var descriptionNode = htmlDoc.GetElementbyId("productDescription").Descendants("div").WithClass("productDescriptionWrapper").LastOrDefault();
+            HtmlNode descriptionNode = null;
+            var productDescriptionNode = htmlDoc.GetElementbyId("productDescription");
+            if (productDescriptionNode != null)
+            {
+                descriptionNode = productDescriptionNode.Descendants("div").WithClass("productDescriptionWrapper").LastOrDefault();
+            }
 
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {
@@ -166,7 +171,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
         {
             var reviewListArea = htmlDoc.GetElementbyId("cm_cr-review_list");
 
-            foreach(var reviewNode in reviewListArea.Elements("div"))
+            foreach (var reviewNode in reviewListArea.Elements("div"))
             {
                 PopulateImpression(reviewNode, impressions);
             }
@@ -202,7 +207,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
         private DateTime? ParseReviewTimestamp(string dateString)
         {
             DateTime timestamp;
-            if(DateTime.TryParseExact(dateString, reviewDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out timestamp))
+            if (DateTime.TryParseExact(dateString, reviewDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out timestamp))
             {
                 return timestamp;
             }

@@ -24,6 +24,7 @@ namespace Playground
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
 
+            var impressionsCount = items.Sum(i => i.Impressions.Length);
             var rating = items.Rating();
 
             Console.WriteLine("Done");
