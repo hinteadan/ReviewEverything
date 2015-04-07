@@ -48,8 +48,8 @@ namespace ReviewEverything.DataProvider
 
     internal class RequestInfo
     {
-        private static TimeSpan cooldown = TimeSpan.FromSeconds(20);
-        private static byte hotWire = 4;
+        private static TimeSpan cooldown = TimeSpan.FromSeconds(30);
+        private static byte hotWire = 3;
 
         private RequestInfo() { }
 

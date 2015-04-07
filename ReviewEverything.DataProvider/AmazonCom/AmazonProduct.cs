@@ -22,13 +22,13 @@ namespace ReviewEverything.DataProvider.AmazonCom
 
             htmlDoc.LoadHtml(content);
 
-            var descriptionNode = htmlDoc.GetElementbyId("productDescription").Descendants("div").WithClass("productDescriptionWrapper").SingleOrDefault();
+            var descriptionNode = htmlDoc.GetElementbyId("productDescription").Descendants("div").WithClass("productDescriptionWrapper").LastOrDefault();
 
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {
                 Name = htmlDoc.GetElementbyId("btAsinTitle").InnerText.Trim(),
                 Description = descriptionNode != null ? new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText } : null,
-                MainImageUrl = htmlDoc.GetElementbyId("main-image").GetAttributeValue("src", null),
+                MainImageUrl = (htmlDoc.GetElementbyId("main-image") ?? htmlDoc.GetElementbyId("prodImage")).GetAttributeValue("src", null),
                 ImagesUrls = ParseOtherImages(htmlDoc.GetElementbyId("thumbs-image")),
                 Price = ParsePrice(htmlDoc.GetElementbyId("actualPriceValue")),
                 OldPrice = this.OldPrice,
