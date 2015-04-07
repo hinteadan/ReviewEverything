@@ -192,6 +192,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
             DateTime? timestamp = ParseReviewTimestamp(dateString);
 
             var commentHtml = reviewNode.Elements("div").WithClass("review-data").Last().Element("span").InnerHtml;
+            commentHtml = string.Format("{0}{1}{1}{1}{2}", title, Environment.NewLine, commentHtml);
 
             impression.By = name;
             impression.Comment = new ReviewItem.RichContent { Html = commentHtml, Text = HtmlToText(commentHtml) };
