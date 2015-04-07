@@ -19,7 +19,7 @@ namespace Playground
             var crawler = new Crawler();
 
             var criterias = new SearchCriteria[] { 
-                new SearchCriteria("Nokia Lumia 930")
+                new SearchCriteria("Mouse Wireless Microsoft 3500")
             };
 
             Task.WaitAll(criterias.Select(c => crawler.Crawl(c)).ToArray());

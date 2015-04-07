@@ -79,7 +79,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
             {
                 var amazonRating = 5 - rowIndex;
                 var rating = (byte)Math.Round((decimal)amazonRating / 5 * 100, 0);
-                var count = int.Parse(reviewSummaryRows[rowIndex].Descendants("td").Last().InnerText.Trim());
+                var count = int.Parse(reviewSummaryRows[rowIndex].Descendants("td").Last().InnerText.Trim().Replace(",", string.Empty));
                 for (var i = 0; i < count; i++)
                 {
                     impressions.Add(new ReviewItem.Impression { Rating = rating });

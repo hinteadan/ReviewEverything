@@ -66,8 +66,8 @@ namespace ReviewEverything.DataProvider.eMag
 
             return specGridNodes.SelectMany(s =>
             {
-                var names = s.Elements("p").WithClass("ch_title").ToArray();
-                var values = s.Elements("p").WithClass("ch_spec").ToArray();
+                var names = s.Descendants("p").WithClass("ch_title").ToArray();
+                var values = s.Descendants("p").WithClass("ch_spec").ToArray();
 
                 ReviewItem.Specification[] specs = new ReviewItem.Specification[names.Length];
 
