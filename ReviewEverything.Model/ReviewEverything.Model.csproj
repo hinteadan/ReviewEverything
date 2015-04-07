@@ -44,6 +44,7 @@
     <Compile Include="ICanStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReviewItem.cs" />
+    <Compile Include="ReviewItemExtensions.cs" />
     <Compile Include="SearchCriteria.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

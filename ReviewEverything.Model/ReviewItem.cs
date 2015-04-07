@@ -57,5 +57,16 @@ namespace ReviewEverything.Model
         public string Currency { get; set; }
         public Impression[] Impressions { get; set; }
 
+        public double? Rating()
+        {
+            var countableImpressions = this.Impressions.Where(i => i.Rating != null);
+
+            if(!countableImpressions.Any())
+            {
+                return null;
+            }
+
+            return Math.Round((double)countableImpressions.Sum(i => i.Rating.Value) / countableImpressions.Count(), 2);
+        }
     }
 }
