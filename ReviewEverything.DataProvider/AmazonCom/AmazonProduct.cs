@@ -29,7 +29,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
                 Name = htmlDoc.GetElementbyId("btAsinTitle").InnerText.Trim(),
                 Description = descriptionNode != null ? new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText } : null,
                 MainImageUrl = (htmlDoc.GetElementbyId("main-image") ?? htmlDoc.GetElementbyId("prodImage")).GetAttributeValue("src", null),
-                ImagesUrls = ParseOtherImages(htmlDoc.GetElementbyId("thumbs-image")),
+                ImagesUrls = ParseOtherImages(htmlDoc.GetElementbyId("thumbs-image") ?? htmlDoc.GetElementbyId("thumb_strip")),
                 Price = ParsePrice(htmlDoc.GetElementbyId("actualPriceValue")),
                 OldPrice = this.OldPrice,
                 Currency = "$",
@@ -154,7 +154,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
             }
 
             return altImagesNode
-                .Elements("img")
+                .Descendants("img")
                 .Select(x =>
                         x.GetAttributeValue("src", string.Empty)
                         .Replace("._SX38_SY50_CR,0,0,38,50_.", "._SX600_SY600_CR,0,0,600,600_.")
