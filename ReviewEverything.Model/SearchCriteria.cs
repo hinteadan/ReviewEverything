@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,20 @@ namespace ReviewEverything.Model
         public string UriFriendly()
         {
             return Uri.EscapeUriString(this.rawSearchString);
+        }
+
+        public string FileNameFriendly()
+        {
+            string fileName = this.RawValue;
+            foreach(char invalidChar in Path.GetInvalidFileNameChars())
+            {
+                fileName = fileName.Replace(invalidChar.ToString(), string.Empty);
+            }
+            if(fileName.Length > 256)
+            {
+                fileName = fileName.Substring(0, 256);
+            }
+            return fileName;
         }
     }
 }

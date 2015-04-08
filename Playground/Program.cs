@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ReviewEverything.DataProvider.AmazonCom;
+using ReviewEverything.Model.Reports.CSV;
+using System.IO;
 
 namespace Playground
 {
@@ -24,8 +26,7 @@ namespace Playground
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
 
-            var impressionsCount = items.Sum(i => i.Impressions.Length);
-            var rating = items.Rating();
+            File.WriteAllText(string.Format(@"C:\Users\dan.hintea\Downloads\{0}.csv", criterias[0].FileNameFriendly()), new CsvReport().Generate(criterias[0], items));
 
             Console.WriteLine("Done");
             Console.ReadLine();
