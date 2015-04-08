@@ -21,9 +21,9 @@ namespace ReviewEverything.Model.Reports.CSV
             return string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\"",
                 criteria.RawValue,
                 string.Empty,
-                string.Format("{0} - {1}", results.Min(r => r.Price.ToString(CultureInfo.InvariantCulture)), results.Max(r => r.Price.ToString(CultureInfo.InvariantCulture))),
+                string.Format("{0} - {1}", results.Min(r => r.Price).ToString(CultureInfo.InvariantCulture), results.Max(r => r.Price).ToString(CultureInfo.InvariantCulture)),
                 string.Join("|", results.Select(r => r.Currency).Distinct()),
-                results.Rating(),
+                results.Rating().HasValue ? results.Rating().Value.ToString(CultureInfo.InvariantCulture) : string.Empty,
                 results.SelectMany(r => r.Impressions).Count()
                 );
         }
@@ -40,7 +40,7 @@ namespace ReviewEverything.Model.Reports.CSV
                 r.Reference,
                 r.Price.ToString(CultureInfo.InvariantCulture),
                 r.Currency,
-                r.Rating(),
+                r.Rating().HasValue ? r.Rating().Value.ToString(CultureInfo.InvariantCulture) : string.Empty,
                 r.Impressions.Length
                 );
         }

@@ -21,7 +21,7 @@ namespace Playground
             var crawler = new Crawler();
 
             var criterias = new SearchCriteria[] { 
-                new SearchCriteria("Nokia Lumia 930")
+                new SearchCriteria("Snickers")
             };
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
