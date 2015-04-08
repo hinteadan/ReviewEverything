@@ -31,11 +31,11 @@ namespace ReviewEverything.DataProvider.AmazonCom
 
             return new ReviewItem(new Uri(this.productDetailsUrl, UriKind.Absolute))
             {
-                Name = htmlDoc.GetElementbyId("btAsinTitle").InnerText.Trim(),
+                Name = (htmlDoc.GetElementbyId("btAsinTitle") ?? htmlDoc.GetElementbyId("productTitle")).InnerText.Trim(),
                 Description = descriptionNode != null ? new ReviewItem.RichContent { Html = descriptionNode.InnerHtml, Text = descriptionNode.InnerText } : null,
-                MainImageUrl = (htmlDoc.GetElementbyId("main-image") ?? htmlDoc.GetElementbyId("prodImage")).GetAttributeValue("src", null),
-                ImagesUrls = ParseOtherImages(htmlDoc.GetElementbyId("thumbs-image") ?? htmlDoc.GetElementbyId("thumb_strip")),
-                Price = ParsePrice(htmlDoc.GetElementbyId("actualPriceValue")),
+                MainImageUrl = (htmlDoc.GetElementbyId("main-image") ?? htmlDoc.GetElementbyId("prodImage") ?? htmlDoc.GetElementbyId("landingImage")).GetAttributeValue("src", null),
+                ImagesUrls = ParseOtherImages(htmlDoc.GetElementbyId("thumbs-image") ?? htmlDoc.GetElementbyId("thumb_strip") ?? htmlDoc.GetElementbyId("altImages")),
+                Price = ParsePrice(htmlDoc.GetElementbyId("actualPriceValue") ?? htmlDoc.GetElementbyId("priceblock_ourprice")),
                 OldPrice = this.OldPrice,
                 Currency = "$",
                 Specifications = ParseSpecs(htmlDoc.GetElementbyId("prodDetails")),
