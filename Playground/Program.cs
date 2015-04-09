@@ -22,12 +22,13 @@ namespace Playground
             var crawler = new Crawler();
 
             var criterias = new SearchCriteria[] { 
-                new SearchCriteria("Coca Cola")
+                new SearchCriteria("Ultrabook Lenovo")
             };
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
 
             new ExcelReport().Generate(criterias[0], items);
+            new CsvReport().Generate(criterias[0], items);
 
             Console.WriteLine("Done");
             Console.ReadLine();

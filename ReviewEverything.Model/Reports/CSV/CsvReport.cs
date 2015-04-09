@@ -40,7 +40,7 @@ namespace ReviewEverything.Model.Reports.CSV
         private string GenerateCsvLine(ReviewItem r)
         {
             return string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\"",
-                r.Name.Replace(",", " "),
+                r.Name.Replace(",", " ").Replace("\"", "''"),
                 r.Reference,
                 r.Price.ToString(CultureInfo.InvariantCulture),
                 r.Currency,
