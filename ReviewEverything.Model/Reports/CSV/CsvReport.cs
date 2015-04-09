@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ReviewEverything.Model.Reports.CSV
 {
-    public class CsvReport : ICanReport<string>
+    public class CsvReport : ReportBase
     {
         private const string header = "Name,URL,Price,Currency,Rating,Impressions";
 
-        public string Generate(SearchCriteria criteria, IEnumerable<ReviewItem> results)
+        public override void Generate(SearchCriteria criteria, IEnumerable<ReviewItem> results)
         {
-            return string.Format("{0}{1}{2}{1}{3}", header, Environment.NewLine, GenerateReportAggregates(criteria, results), GenerateReportContent(results));
+            File.WriteAllText(
+                ReportPath(string.Format("{0}.csv", criteria.FileNameFriendly())),
+                string.Format("{0}{1}{2}{1}{3}", header, Environment.NewLine, GenerateReportAggregates(criteria, results), GenerateReportContent(results))
+                );
         }
 
         private string GenerateReportAggregates(SearchCriteria criteria, IEnumerable<ReviewItem> results)
@@ -35,7 +39,7 @@ namespace ReviewEverything.Model.Reports.CSV
 
         private string GenerateCsvLine(ReviewItem r)
         {
-            return string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\"", 
+            return string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\"",
                 r.Name.Replace(",", " "),
                 r.Reference,
                 r.Price.ToString(CultureInfo.InvariantCulture),

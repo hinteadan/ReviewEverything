@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ReviewEverything.Model.Reports
 {
-    public interface ICanReport<TProjection>
+    public interface ICanReport
     {
-        TProjection Generate(SearchCriteria criteria, IEnumerable<ReviewItem> results);
+        void Generate(SearchCriteria criteria, IEnumerable<ReviewItem> results);
     }
 }

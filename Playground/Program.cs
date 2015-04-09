@@ -26,7 +26,7 @@ namespace Playground
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
 
-            File.WriteAllText(string.Format(@"C:\Users\dan.hintea\Downloads\{0}.csv", criterias[0].FileNameFriendly()), new CsvReport().Generate(criterias[0], items));
+            new CsvReport().Generate(criterias[0], items);
 
             Console.WriteLine("Done");
             Console.ReadLine();
