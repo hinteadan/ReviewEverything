@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using ReviewEverything.DataProvider.AmazonCom;
 using ReviewEverything.Model.Reports.CSV;
 using System.IO;
+using ReviewEverything.Model.Reports.Excel;
 
 namespace Playground
 {
@@ -26,7 +27,7 @@ namespace Playground
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
 
-            new CsvReport().Generate(criterias[0], items);
+            new ExcelReport().Generate(criterias[0], items);
 
             Console.WriteLine("Done");
             Console.ReadLine();
