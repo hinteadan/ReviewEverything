@@ -15,7 +15,7 @@ namespace ReviewEverything.Model.Reports.CSV
         public override void Generate(SearchCriteria criteria, IEnumerable<ReviewItem> results)
         {
             File.WriteAllText(
-                ReportPath(string.Format("{0}.csv", criteria.FileNameFriendly())),
+                ReportPath("{0}.csv", criteria.FileNameFriendly()),
                 string.Format("{0}{1}{2}{1}{3}", header, Environment.NewLine, GenerateReportAggregates(criteria, results), GenerateReportContent(results))
                 );
         }

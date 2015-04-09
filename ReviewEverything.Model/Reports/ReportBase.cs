@@ -16,9 +16,9 @@ namespace ReviewEverything.Model.Reports
 
         public abstract void Generate(SearchCriteria criteria, IEnumerable<ReviewItem> results);
 
-        protected string ReportPath(string reportFileName)
+        protected string ReportPath(string reportFileNameFormat, params object[] args)
         {
-            return string.Format(@"{0}\{1}", GetReportsBasePath(), reportFileName);
+            return string.Format(@"{0}\{1}", GetReportsBasePath(), string.Format(reportFileNameFormat, args));
         }
 
         protected string GetReportsBasePath()
