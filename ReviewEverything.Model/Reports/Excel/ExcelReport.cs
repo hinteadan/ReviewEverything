@@ -190,6 +190,13 @@ namespace ReviewEverything.Model.Reports.Excel
                 var cell = row.CreateCell(i);
 
                 cell.SetCellValue(values[i]);
+
+                if(columns[i] == "URL")
+                {
+                    XSSFHyperlink link = new XSSFHyperlink(HyperlinkType.Url);
+                    link.Address = values[i];
+                    cell.Hyperlink = link;
+                }
             }
         }
 
