@@ -22,7 +22,7 @@ namespace ReviewEverything.DataProvider.eMag
             var detailsNode = htmlDoc.GetElementbyId("description_section");
             var descriptionNode = detailsNode.Descendants("div").WithClass("preview_desc").FirstOrDefault();
 
-            var mainImageNode = htmlDoc.GetElementbyId("zoom-image").Element("img");
+            var mainImageNode = (htmlDoc.GetElementbyId("zoom-image") ?? htmlDoc.GetElementbyId("product-pictures-picture")).Descendants("img").First();
             string mainImagePath = string.Format("http:{0}", mainImageNode.GetAttributeValue("src", null));
 
             var otherImgPaths = new string[0];
@@ -57,6 +57,11 @@ namespace ReviewEverything.DataProvider.eMag
 
         private ReviewItem.Specification[] ParseSpecs(HtmlNode specsNode)
         {
+            if(specsNode == null)
+            {
+                return new ReviewItem.Specification[0];
+            }
+
             var specGridNodes = specsNode.Elements("div")
                 .WithClass("holder-specificatii")
                 .SelectMany(n =>

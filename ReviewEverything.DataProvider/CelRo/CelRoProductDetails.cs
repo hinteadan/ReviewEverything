@@ -60,7 +60,7 @@ namespace ReviewEverything.DataProvider.CelRo
 
         private IEnumerable<ReviewItem.Impression> ParseImpressions(HtmlNode prodInfoNode)
         {
-            string dateTimeFormat = "'a scris pe' d MMM yyyy 'la' HH:mm";
+            string dateTimeFormat = "'a scris pe' d MMM yyyy 'la' H:mm";
             var nameNodes = prodInfoNode.Elements("div").WithClass("review_nume").ToArray();
             var commentNodes = prodInfoNode.Elements("div").WithClass("review_coment").ToArray();
 
