@@ -177,7 +177,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
         {
             var reviewListArea = htmlDoc.GetElementbyId("cm_cr-review_list");
 
-            foreach (var reviewNode in reviewListArea.Elements("div"))
+            foreach (var reviewNode in reviewListArea.Elements("div").WithClass("review"))
             {
                 TryPopulateImpressions(reviewNode, impressions);
             }
