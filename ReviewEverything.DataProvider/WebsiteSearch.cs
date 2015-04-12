@@ -20,7 +20,16 @@ namespace ReviewEverything.DataProvider
         public IEnumerable<ICanBeParsed> SearchFor(SearchCriteria criteria)
         {
             Log.Trace("Search Website for: {0}", criteria.RawValue);
-            return ParseSearchResult(HttpOperations.Get(SearchEndpointFor(criteria)).Result);
+
+            var url = SearchEndpointFor(criteria);
+            var content = HttpOperations.Get(url).Result;
+            if (content == null)
+            {
+                Log.Warn("Error parsing website search results. No content can be load from: {0}", url);
+                return null;
+            }
+
+            return ParseSearchResult(content);
         }
 
         protected virtual string SearchEndpointFor(SearchCriteria criteria)

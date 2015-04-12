@@ -43,8 +43,7 @@ namespace ReviewEverything.DataProvider
                     }
                     catch(Exception x)
                     {
-                        log.Error<Exception, string>("Error HTTP GET-ing {0}", x, url);
-                        throw;
+                        log.Error("Error HTTP GET-ing {0}", x, url);
                     }
                 });
 

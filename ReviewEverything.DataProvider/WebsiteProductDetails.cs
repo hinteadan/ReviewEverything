@@ -30,7 +30,13 @@ namespace ReviewEverything.DataProvider
 
         public ReviewItem Parse()
         {
-            return Parse(HttpOperations.Get(this.productDetailsUrl).Result);
+            var content = HttpOperations.Get(this.productDetailsUrl).Result;
+            if(content == null)
+            {
+                Log.Warn("Error parsing website product details. No content can be load from: {0}", this.productDetailsUrl);
+                return null;
+            }
+            return Parse(content);
         }
 
         protected abstract ReviewItem Parse(string content);

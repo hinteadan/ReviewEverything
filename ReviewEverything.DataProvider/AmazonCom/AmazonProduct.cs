@@ -71,6 +71,12 @@ namespace ReviewEverything.DataProvider.AmazonCom
 
             string content = HttpOperations.Get(reviewsUrl).Result;
 
+            if(content == null)
+            {
+                Log.Warn("Error parsing impressions for Amazon.com product at {0}. No content at {1}.", productDetailsUrl, reviewsUrl);
+                return new ReviewItem.Impression[0];
+            }
+
             var htmlDoc = new HtmlDocument();
 
             Log.Trace("Parsing Amazon.com product impressions from {0}", reviewsUrl);
@@ -185,7 +191,7 @@ namespace ReviewEverything.DataProvider.AmazonCom
             }
             catch(Exception x)
             {
-                Log.Error<Exception, string>("Error populating impressions for Amazon product from {0}", x, this.productDetailsUrl);
+                Log.Error(string.Format("Error populating impressions for Amazon product {0}, review node HTML: {1}", this.productDetailsUrl, reviewNode != null ? reviewNode.InnerHtml : "NULL"), x);
             }
         }
 

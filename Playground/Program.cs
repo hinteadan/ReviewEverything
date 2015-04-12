@@ -22,7 +22,7 @@ namespace Playground
             var crawler = new Crawler();
 
             var criterias = new SearchCriteria[] { 
-                new SearchCriteria("Samsung Galaxy S6")
+                new SearchCriteria("MacBook Pro")
             };
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
@@ -43,11 +43,19 @@ namespace Playground
 
             cfg.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
 
+
             var fileTarget = new FileTarget();
             fileTarget.FileName = @"Logs\Log.txt";
             cfg.AddTarget("File", fileTarget);
 
             cfg.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
+
+
+            var errorOnlyFileTarget = new FileTarget();
+            errorOnlyFileTarget.FileName = @"Logs\Errors.txt";
+            cfg.AddTarget("ErrorFile", errorOnlyFileTarget);
+
+            cfg.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, errorOnlyFileTarget));
 
             LogManager.Configuration = cfg;
         }

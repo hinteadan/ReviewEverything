@@ -54,11 +54,12 @@ namespace ReviewEverything.DataProvider
         {
             log.Trace("Crawling search results for '{0}'", criteria.RawValue);
             var searchResuts = await Task.WhenAll(dataSources.Select(s => s.SearchForAsync(criteria)));
+            searchResuts = searchResuts.Where(s => s != null).ToArray();
 
             log.Trace("Crawling search result items for '{0}'", criteria.RawValue);
             var reviewItems = await Task.WhenAll(searchResuts.SelectMany(x => x).Select(i => i.ParseAsync()));
 
-            return reviewItems;
+            return reviewItems.Where(i => i != null).ToArray();
         }
 
         private bool IsCriteriaExpired(SearchCriteria criteria)
