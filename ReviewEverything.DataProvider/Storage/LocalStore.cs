@@ -180,8 +180,6 @@ namespace ReviewEverything.DataProvider.Storage
         {
             log.Trace("Persisting {0} review items to local disk", items.Count());
 
-            List<StoreIndexEntry> indexEntries = new List<StoreIndexEntry>();
-
             string type = typeof(ReviewItem).AssemblyQualifiedName;
 
             foreach (var item in items)
@@ -193,7 +191,8 @@ namespace ReviewEverything.DataProvider.Storage
                 };
                 File.WriteAllText(string.Format(@"{0}\{1}", documentsPath, doc.Id), JsonConvert.SerializeObject(doc, Formatting.Indented));
 
-                indexEntries.Add(new StoreIndexEntry { 
+                documentsIndexDictionary.Add(doc.Id, new StoreIndexEntry
+                {
                     Id = doc.Id,
                     Type = type,
                     Fields = IndexFieldsFor(item)
@@ -201,6 +200,9 @@ namespace ReviewEverything.DataProvider.Storage
 
                 yield return doc;
             }
+
+            isIndexUpdatedBySelf = true;
+            File.WriteAllText(indexFilePath, JsonConvert.SerializeObject(documentsIndexDictionary, Formatting.Indented));
         }
 
         private StoreIndexEntry PersistSearchCriteria(SearchCriteria criteria, IEnumerable<StoreDocument<ReviewItem>> storedReviewItems)
