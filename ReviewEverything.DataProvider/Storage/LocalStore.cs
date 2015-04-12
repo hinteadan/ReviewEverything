@@ -8,6 +8,7 @@ using ReviewEverything.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NLog;
+using System.Globalization;
 
 namespace ReviewEverything.DataProvider.Storage
 {
@@ -179,6 +180,10 @@ namespace ReviewEverything.DataProvider.Storage
         {
             log.Trace("Persisting {0} review items to local disk", items.Count());
 
+            List<StoreIndexEntry> indexEntries = new List<StoreIndexEntry>();
+
+            string type = typeof(ReviewItem).AssemblyQualifiedName;
+
             foreach (var item in items)
             {
                 var doc = new StoreDocument<ReviewItem>
@@ -187,6 +192,13 @@ namespace ReviewEverything.DataProvider.Storage
                     Payload = item
                 };
                 File.WriteAllText(string.Format(@"{0}\{1}", documentsPath, doc.Id), JsonConvert.SerializeObject(doc, Formatting.Indented));
+
+                indexEntries.Add(new StoreIndexEntry { 
+                    Id = doc.Id,
+                    Type = type,
+                    Fields = IndexFieldsFor(item)
+                });
+
                 yield return doc;
             }
         }
@@ -222,6 +234,21 @@ namespace ReviewEverything.DataProvider.Storage
                         string.Format("{0}{1}{2}", i.Id, stringPairJoint, i.Payload.Reference)
                     ).ToArray()) 
                 }
+            };
+        }
+
+        private Dictionary<string, string> IndexFieldsFor(ReviewItem item)
+        {
+            return new Dictionary<string, string> 
+            { 
+                { "Reference", item.Reference.ToString() },
+                { "Name", item.Name },
+                { "CreatedOn", item.CreatedOn.ToString(CultureInfo.InvariantCulture) },
+                { "Currency", item.Currency },
+                { "Price", item.Price.ToString(CultureInfo.InvariantCulture) },
+                { "Rating", item.Rating().ToString() },
+                { "SpecificationsCount", item.Specifications.Length.ToString(CultureInfo.InvariantCulture) },
+                { "ImpressionsCount", item.Impressions.Length.ToString(CultureInfo.InvariantCulture) }
             };
         }
 

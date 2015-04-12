@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using NLog;
+using Recognos.Core;
 
 namespace ReviewEverything.DataProvider
 {
@@ -34,7 +35,23 @@ namespace ReviewEverything.DataProvider
 
                 log.Trace("Requesting HTTP GET {0}", url);
                 HttpWebRequest request = HttpWebRequest.CreateHttp(url);
-                var response = request.GetResponse() as HttpWebResponse;
+                HttpWebResponse response = null;
+                Retry.RunWithRetry(()=>{
+                    try
+                    {
+                        response = request.GetResponse() as HttpWebResponse;
+                    }
+                    catch(Exception x)
+                    {
+                        log.Error<Exception, string>("Error HTTP GET-ing {0}", x, url);
+                        throw;
+                    }
+                });
+
+                if(response == null)
+                {
+                    return null;
+                }
 
                 requests[domain].Track();
 

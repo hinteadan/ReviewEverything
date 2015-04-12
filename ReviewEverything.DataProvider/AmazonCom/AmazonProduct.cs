@@ -173,7 +173,19 @@ namespace ReviewEverything.DataProvider.AmazonCom
 
             foreach (var reviewNode in reviewListArea.Elements("div"))
             {
+                TryPopulateImpressions(reviewNode, impressions);
+            }
+        }
+
+        private void TryPopulateImpressions(HtmlNode reviewNode, List<ReviewItem.Impression> impressions)
+        {
+            try
+            {
                 PopulateImpression(reviewNode, impressions);
+            }
+            catch(Exception x)
+            {
+                Log.Error<Exception, string>("Error populating impressions for Amazon product from {0}", x, this.productDetailsUrl);
             }
         }
 

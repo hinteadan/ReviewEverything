@@ -22,7 +22,7 @@ namespace Playground
             var crawler = new Crawler();
 
             var criterias = new SearchCriteria[] { 
-                new SearchCriteria("card micro sd")
+                new SearchCriteria("Samsung Galaxy S6")
             };
 
             var items = Task.WhenAll(criterias.Select(c => crawler.Crawl(c))).Result.SelectMany(x => x.ToArray());
